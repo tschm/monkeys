@@ -1,33 +1,26 @@
 [tool.poetry]
-name = "cvxsimulator"
+name = "monkeys"
 version = "0.0.0"
-description = "Simple simulator for investors"
+description = "Monkeys doing asset management"
 authors = ["Thomas Schmelzer"]
 readme = "README.md"
-repository = "https://github.com/cvxgrp/simulator"
+repository = "https://github.com/tschm/monkeys"
 packages = [{include = "cvx"}]
-homepage = "https://www.cvxgrp.org/simulator"
+homepage = "https://tschm.github.io/monkeys"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
-numpy = "*"
-pandas = "*"
-quantstats = "*"
-ipython = "*"
+cvxsimulator = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
 pytest-cov = "*"
-mock = "*"
+pre-commit = "*"
 
 [tool.poetry.group.dev.dependencies]
-yfinance = "*"
 plotly = "*"
 loguru = "*"
-
-#[tool.mypy]
-#files = ["cvx/simulator"]
-#explicit_package_bases = true
+yfinance = "*"
 
 [build-system]
 requires = ["poetry>=1.6.0"]
