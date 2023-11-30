@@ -1,4 +1,4 @@
- [monkeys](https://tschm.github.io/monkeys/book)
+# [monkeys](https://tschm.github.io/monkeys/book)
 
 [![PyPI version](https://badge.fury.io/py/monkeys.svg)](https://badge.fury.io/py/monkeys)
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/tschm/monkeys/blob/main/LICENSE)
