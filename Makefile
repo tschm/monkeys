@@ -4,9 +4,11 @@ SHELL=/bin/bash
 
 UNAME=$(shell uname -s)
 
+
 .PHONY: install
 install:  ## Install a virtual environment
 	@poetry install -vv
+
 
 .PHONY: fmt
 fmt:  ## Run autoformatting and linting
@@ -14,13 +16,16 @@ fmt:  ## Run autoformatting and linting
 	@poetry run pre-commit install
 	@poetry run pre-commit run --all-files
 
+
 .PHONY: test
 test: install ## Run tests
 	@poetry run pytest
 
+
 .PHONY: clean
 clean:  ## Clean up caches and build artifacts
 	@git clean -X -d -f
+
 
 .PHONY: coverage
 coverage: install ## test and coverage
@@ -46,10 +51,12 @@ jupyter: install ## Run jupyter lab
 	@poetry run pip install jupyterlab
 	@poetry run jupyter lab
 
+
 .PHONY: marimo
 marimo: install ## Run jupyter lab
 	@poetry run pip install marimo
 	@poetry run marimo edit
+
 
 .PHONY: boil
 boil: ## Update the boilerplate code
