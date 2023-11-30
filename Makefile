@@ -10,34 +10,9 @@ install:  ## Install a virtual environment
 	@poetry install -vv
 
 
-.PHONY: fmt
-fmt:  ## Run autoformatting and linting
-	@poetry run pip install pre-commit
-	@poetry run pre-commit install
-	@poetry run pre-commit run --all-files
-
-
-.PHONY: test
-test: install ## Run tests
-	@poetry run pytest
-
-
 .PHONY: clean
 clean:  ## Clean up caches and build artifacts
 	@git clean -X -d -f
-
-
-.PHONY: coverage
-coverage: install ## test and coverage
-	@poetry run coverage run --source=cvx/. -m pytest
-	@poetry run coverage report -m
-	@poetry run coverage html
-
-	@if [ ${UNAME} == "Darwin" ]; then \
-		open htmlcov/index.html; \
-	elif [ ${UNAME} == "linux" ]; then \
-		xdg-open htmlcov/index.html 2> /dev/null; \
-	fi
 
 
 .PHONY: help
@@ -57,8 +32,3 @@ marimo: install ## Run jupyter lab
 	@poetry run pip install marimo
 	@poetry run marimo edit
 
-
-.PHONY: boil
-boil: ## Update the boilerplate code
-	@poetry run pip install cvxcooker
-	@poetry run cook pyproject.toml
