@@ -15,11 +15,12 @@ cvxsimulator = "*"
 [tool.poetry.group.test.dependencies]
 pytest = "*"
 pytest-cov = "*"
-mock = "*"
+pre-commit = "*"
 
 [tool.poetry.group.dev.dependencies]
 plotly = "*"
 loguru = "*"
+yfinance = "*"
 
 [build-system]
 requires = ["poetry>=1.6.0"]
