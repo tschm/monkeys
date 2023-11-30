@@ -6,8 +6,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/tschm/monkeys/badge.png?branch=main)](https://coveralls.io/github/tschm/monkeys?branch=main)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/tschm/monkeys/main.svg)](https://results.pre-commit.ci/latest/github/tschm/monkeys/main)
 
-
-
 ## Poetry
 
 We assume you share already the love for [Poetry](https://python-poetry.org).
