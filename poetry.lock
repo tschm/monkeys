@@ -233,13 +233,13 @@ test-no-images = ["pytest", "pytest-cov", "pytest-xdist", "wurlitzer"]
 
 [[package]]
 name = "cvxsimulator"
-version = "0.8.4"
+version = "0.8.5"
 description = "Simple simulator for investors"
 optional = false
 python-versions = ">=3.9,<3.12"
 files = [
-    {file = "cvxsimulator-0.8.4-py3-none-any.whl", hash = "sha256:2f10fb571607596f675fa01e53961d4c7030ca1ac9fc05367965c6df98c7ede1"},
-    {file = "cvxsimulator-0.8.4.tar.gz", hash = "sha256:b8ec7c281190c8ca837be1b534fd9ae2447bbc3337d0cc6e6420476a32ed9086"},
+    {file = "cvxsimulator-0.8.5-py3-none-any.whl", hash = "sha256:68ff9ea067b50db0ba347340e7a7529962ea97a658055bbbf8956bece37cc4b6"},
+    {file = "cvxsimulator-0.8.5.tar.gz", hash = "sha256:1b5f9d9c3997a7811743ee88ed907395ffc23f5aba3240e305e04c766c1fa877"},
 ]
 
 [package.dependencies]
