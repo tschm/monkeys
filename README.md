@@ -31,17 +31,15 @@ So when we say $n$ stocks we keep in mind that $n$ is not constant over time.
 
 
 
-## Poetry
+## Environment
 
-We assume you share already the love for [Poetry](https://python-poetry.org).
-Once you have installed poetry you can perform
+Create the virtual environment with
 
 ```bash
 make install
 ```
 
-to replicate the virtual environment we have defined in [pyproject.toml](pyproject.toml)
-and locked in [poetry.lock](poetry.lock).
+to install all dependencies listed in requirements.txt
 
 ## Jupyter
 
