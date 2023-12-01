@@ -233,13 +233,13 @@ test-no-images = ["pytest", "pytest-cov", "pytest-xdist", "wurlitzer"]
 
 [[package]]
 name = "cvxsimulator"
-version = "0.8.5"
+version = "0.8.6"
 description = "Simple simulator for investors"
 optional = false
 python-versions = ">=3.9,<3.12"
 files = [
-    {file = "cvxsimulator-0.8.5-py3-none-any.whl", hash = "sha256:68ff9ea067b50db0ba347340e7a7529962ea97a658055bbbf8956bece37cc4b6"},
-    {file = "cvxsimulator-0.8.5.tar.gz", hash = "sha256:1b5f9d9c3997a7811743ee88ed907395ffc23f5aba3240e305e04c766c1fa877"},
+    {file = "cvxsimulator-0.8.6-py3-none-any.whl", hash = "sha256:4fc7274981a41d5de3706b90b74d70d356209f4be62bf42a085734c2044f3be2"},
+    {file = "cvxsimulator-0.8.6.tar.gz", hash = "sha256:a60104971e0d761b33adae4354fa47d7842172e43142e5202898dca484dc23b9"},
 ]
 
 [package.dependencies]
@@ -1473,4 +1473,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "c212665fd60a29868885c7c5cad02ea516b919c789e6b44acc4d74b7efd63e0a"
+content-hash = "969ee395319055168cb0ff25a3bc3746f26ebc070b79b583cbcdf8ee77b676a7"

@@ -10,7 +10,7 @@ homepage = "https://tschm.github.io/monkeys"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
-cvxsimulator = "*"
+cvxsimulator = "0.8.6"
 
 [tool.poetry.group.dev.dependencies]
 plotly = "*"
