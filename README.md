@@ -1,9 +1,11 @@
 # [monkeys](https://tschm.github.io/monkeys/book)
 
-[![PyPI version](https://badge.fury.io/py/monkeys.svg)](https://badge.fury.io/py/monkeys)
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/tschm/monkeys/blob/main/LICENSE)
-[![Downloads](https://static.pepy.tech/personalized-badge/monkeys?period=month&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20downloads%20per%20month)](https://pepy.tech/project/monkeys)
-[![Coverage Status](https://coveralls.io/repos/github/tschm/monkeys/badge.png?branch=main)](https://coveralls.io/github/tschm/monkeys?branch=main)
+
+It is well known that Monkeys often outperform asset managers.
+
+In this context we assume a monkey is a long only investor in stocks. 
+We give the monkey a universe of $n$ assets. He picks asset $i$ with a probability of $p_i$.
 
 ## Poetry
 
