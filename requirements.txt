@@ -1,2 +1,3 @@
 cvxsimulator
-loguru
+plotly
+
