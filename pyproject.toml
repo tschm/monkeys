@@ -12,11 +12,6 @@ homepage = "https://tschm.github.io/monkeys"
 python = ">=3.9,<3.12"
 cvxsimulator = "*"
 
-[tool.poetry.group.test.dependencies]
-pytest = "*"
-pytest-cov = "*"
-pre-commit = "*"
-
 [tool.poetry.group.dev.dependencies]
 plotly = "*"
 loguru = "*"
