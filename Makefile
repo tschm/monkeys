@@ -34,4 +34,3 @@ help:  ## Display this help screen
 marimo: install ## Install Marimo
 	@uv pip install marimo
 	@uv run marimo edit notebooks
-
