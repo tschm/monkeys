@@ -1,63 +1,45 @@
 import marimo
 
-__generated_with = "0.9.27"
+__generated_with = "0.10.9"
 app = marimo.App()
 
 
 @app.cell
-def __(mo):
-    mo.md(
-        r"""
-        # A random walk down an equity portfolio
-
-        """
-    )
+def _(mo):
+    mo.md(r"""# A random walk down an equity portfolio""")
     return
 
 
-app._unparsable_cell(
-    r"""
-    Copyright 2023 Thomas Schmelzer
-
-    Licensed under the Apache License, Version 2.0 (the \"License\");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an \"AS IS\" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-    """,
-    name="__",
-)
-
-
 @app.cell
-def __():
+def _(__file__):
+    from pathlib import Path
+
     import pandas as pd
     import numpy as np
 
     # import the builder to create the portfolio
-    from cvx.simulator.builder import builder
+    from cvx.simulator import Builder
 
     pd.options.plotting.backend = "plotly"
-    return builder, np, pd
+
+    folder = Path(__file__).parent
+
+    return Builder, Path, folder, np, pd
 
 
 @app.cell
-def __(pd):
+def _(folder, pd):
     # load price data. The price data is from Robert Martin's PyPortfolioOpt repository
-    df = pd.read_csv("data/stock-prices.csv", index_col="date", parse_dates=True)
+    df = pd.read_csv(
+        folder / "data" / "stock-prices.csv", index_col="date", parse_dates=True
+    )
     return (df,)
 
 
 @app.cell
-def __(builder, df, np):
+def _(Builder, df, np):
     # The monkey starts with 1m USD
-    b = builder(prices=df, initial_cash=1e6)
+    b = Builder(prices=df, initial_aum=1e6)
 
     # For each asset the first and the last valid index
     print(b.intervals)
@@ -71,32 +53,26 @@ def __(builder, df, np):
         w = np.random.rand(n)
         # update the weights
         b.weights = w / np.sum(w)
+        b.aum = state.aum
     return b, n, state, t, w
 
 
 @app.cell
-def __(b):
+def _(b):
     # build the portfolio
     portfolio = b.build()
     return (portfolio,)
 
 
 @app.cell
-def __(portfolio):
+def _(portfolio):
     # plot the nav curve
     portfolio.nav.plot()
     return
 
 
 @app.cell
-def __(portfolio):
-    # it is known that quantstats has a bug when computing the CAGR%
-    portfolio.metrics()
-    return
-
-
-@app.cell
-def __():
+def _():
     import marimo as mo
 
     return (mo,)
