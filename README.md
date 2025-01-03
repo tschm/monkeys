@@ -2,6 +2,8 @@
 
 [![Apache 2.0 License](https://img.shields.io/badge/License-APACHEv2-brightgreen.svg)](https://github.com/tschm/monkeys/blob/main/LICENSE)
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/tschm/monkeys)
+
 It is well known that Monkeys often outperform asset managers.
 
 In this context we assume a monkey is managing a fully invested long only portfolio.
