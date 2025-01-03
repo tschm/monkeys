@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@949720bc7fdb4c3f8d839ca8d031d2e2ec98015d
+        uses: astral-sh/setup-uv@7b290f7b857af58b20a162f9ef2c3197b5c1ab41
 
       - name: Create virtual environment
         run: |
