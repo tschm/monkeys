@@ -40,11 +40,10 @@ def __():
     import pandas as pd
     import numpy as np
 
-    pd.options.plotting.backend = "plotly"
-
     # import the builder to create the portfolio
     from cvx.simulator.builder import builder
 
+    pd.options.plotting.backend = "plotly"
     return builder, np, pd
 
 
