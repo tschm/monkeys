@@ -12,10 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Generate Tag
         uses: cvxgrp/.github/actions/tag@v2.1.1
         with:
