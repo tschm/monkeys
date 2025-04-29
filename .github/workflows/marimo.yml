@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.60
+        uses: tschm/cradle/actions/environment@v0.1.63
 
-      - uses: tschm/cradle/actions/marimo@v0.1.60
+      - uses: tschm/cradle/actions/marimo@v0.1.63
         with:
           source_folder: 'notebooks'
