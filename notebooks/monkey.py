@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.10.9"
+__generated_with = "0.13.10"
 app = marimo.App()
 
 
@@ -11,7 +11,7 @@ def _(mo):
 
 
 @app.cell
-def _(__file__):
+def _():
     from pathlib import Path
 
     import pandas as pd
@@ -24,7 +24,7 @@ def _(__file__):
 
     folder = Path(__file__).parent
 
-    return Builder, Path, folder, np, pd
+    return Builder, folder, np, pd
 
 
 @app.cell
@@ -54,7 +54,7 @@ def _(Builder, df, np):
         # update the weights
         b.weights = w / np.sum(w)
         b.aum = state.aum
-    return b, n, state, t, w
+    return (b,)
 
 
 @app.cell
@@ -68,6 +68,12 @@ def _(b):
 def _(portfolio):
     # plot the nav curve
     portfolio.nav.plot()
+    return
+
+
+@app.cell
+def _(portfolio):
+    portfolio.snapshot()
     return
 
 
