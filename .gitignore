@@ -8,3 +8,4 @@ __pycache__/
 
 .venv
 .ipynb_checkpoints
+__marimo__
