@@ -46,6 +46,10 @@ marimo: install ## Start a Marimo server
 	@uv pip install marimo
 	@uv run marimo edit notebooks
 
+slides: install
+	@uv pip install marimo
+	@uv run marimo export html notebooks/monkey.py -o slides.html
+
 ##@ Help
 
 help: ## Display this help message
