@@ -1,7 +1,11 @@
 name: Install Dependencies with UV
 
+# Trigger the workflow on push events
+# This ensures the documentation is automatically updated whenever code changes are pushed to main
 on:
-  push
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
