@@ -6,9 +6,8 @@ app = marimo.App()
 with app.setup:
     import marimo as mo
     import numpy as np
+    import pandas as pd
     import plotly.io as pio
-
-    # import pandas as pd
     import polars as pl
 
     # Ensure Plotly works with Marimo
@@ -24,7 +23,13 @@ with app.setup:
     prices_file = str(path / "public" / "stock-prices-new.csv")
 
     prices = pl.read_csv(prices_file, try_parse_dates=True).to_pandas().set_index("Date")
+
+    # Convert all other columns to float64
+    for col in prices.columns:
+        prices[col] = pd.to_numeric(prices[col], errors="coerce").astype("float64")
+
     print(prices)
+    print(prices.dtypes)
 
 
 @app.cell
