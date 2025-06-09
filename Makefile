@@ -43,11 +43,11 @@ clean: ## Clean generated files and directories
 marimo: install ## Start a Marimo server
 	@printf "$(BLUE)Start Marimo server...$(RESET)\n"
 	@uv pip install marimo
-	@uv run marimo edit notebooks
+	@uv run marimo edit book/marimo
 
-slides: install
-	@uv pip install marimo
-	@uv run marimo export html notebooks/monkey.py -o slides.html
+#slides: install
+#	@uv pip install marimo
+#	@uv run marimo export html notebooks/monkey.py -o slides.html
 
 ##@ Help
 

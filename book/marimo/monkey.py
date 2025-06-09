@@ -10,7 +10,7 @@ with app.setup:
 
     pd.options.plotting.backend = "plotly"
 
-    # load price data. The price data is from Robert Martin's PyPortfolioOpt repository
+    # load price data
     prices_file = str(mo.notebook_location() / "public" / "stock-prices.csv")
 
     prices = pd.read_csv(prices_file, index_col="date", parse_dates=True, header=0)
@@ -51,9 +51,9 @@ def _():
     print(b.intervals)
     # An asset is valid if there are no NaNs in the interval above
     print(b.valid)
+    print(b.prices.columns)
 
     rng = np.random.default_rng(0)
-    # pos = rng.standard_normal((2600, 2))
 
     # iterate through time and update the state
     for _t, state in b:
@@ -62,6 +62,7 @@ def _():
         w = rng.uniform(0, 1, n)
         # update the weights
         b.weights = w / np.sum(w)
+        # here you could subtract whatever has been spent for trading costs
         b.aum = state.aum
     return (b,)
 
@@ -75,14 +76,18 @@ def _(b):
 
 @app.cell
 def _(portfolio):
-    # plot the nav curve
-    portfolio.nav.plot()
+    portfolio.snapshot()
     return
 
 
 @app.cell
 def _(portfolio):
-    portfolio.snapshot()
+    portfolio.reports.metrics()
+    return
+
+
+@app.cell
+def _():
     return
 
 
