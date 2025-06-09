@@ -1,6 +1,6 @@
 marimo==0.13.15
 cvxsimulator==1.3.16
 plotly==6.1.2
-numpy>2.0
-yfinance>=0.2.36
+numpy==2.3.0
+yfinance==0.2.62
 pandas==2.2.3
