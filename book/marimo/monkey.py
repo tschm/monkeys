@@ -11,7 +11,7 @@ with app.setup:
     pd.options.plotting.backend = "plotly"
 
     # load price data
-    prices_file = str(mo.notebook_location() / "public" / "stock-prices.csv")
+    prices_file = str(mo.notebook_location() / "public" / "stock-prices-new.csv")
 
     prices = pd.read_csv(prices_file, index_col="date", parse_dates=True, header=0)
 
