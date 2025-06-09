@@ -21,4 +21,5 @@ jobs:
       - name: Run notebooks
         run: |
           uv pip install --no-cache-dir marimo
-          uv run python "book/marimo/monkey.py"
+          cd book/marimo
+          uv run python "monkey.py"
