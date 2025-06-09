@@ -13,7 +13,7 @@ with app.setup:
     # load price data
     prices_file = str(mo.notebook_location() / "public" / "stock-prices-new.csv")
 
-    prices = pd.read_csv(prices_file, index_col="date", parse_dates=True, header=0)
+    prices = pd.read_csv(prices_file, index_col=0, parse_dates=True, header=0)
 
 
 @app.cell
