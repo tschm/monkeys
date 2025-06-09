@@ -10,8 +10,11 @@ with app.setup:
 
     pd.options.plotting.backend = "plotly"
 
+    path = mo.notebook_location()
+    print(path)
+
     # load price data
-    prices_file = str(mo.notebook_location() / "public" / "stock-prices-new.csv")
+    prices_file = str(path / "public" / "stock-prices-new.csv")
 
     prices = pd.read_csv(prices_file, index_col=0, parse_dates=True, header=0)
 
@@ -64,14 +67,9 @@ def _():
         b.weights = w / np.sum(w)
         # here you could subtract whatever has been spent for trading costs
         b.aum = state.aum
-    return (b,)
 
-
-@app.cell
-def _(b):
-    # build the portfolio
     portfolio = b.build()
-    return (portfolio,)
+    return portfolio
 
 
 @app.cell
@@ -83,11 +81,6 @@ def _(portfolio):
 @app.cell
 def _(portfolio):
     portfolio.reports.metrics()
-    return
-
-
-@app.cell
-def _():
     return
 
 
