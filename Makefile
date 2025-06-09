@@ -22,9 +22,8 @@ install: venv ## Install all dependencies using uv
 
 fmt: venv ## Run code formatting and linting
 	@printf "$(BLUE)Running formatters and linters...$(RESET)\n"
-	@uv pip install pre-commit
-	@uv run pre-commit install
-	@uv run pre-commit run --all-files
+	@uvx pre-commit install
+	@uvx pre-commit run --all-files
 
 ##@ Testing
 
@@ -44,11 +43,11 @@ clean: ## Clean generated files and directories
 marimo: install ## Start a Marimo server
 	@printf "$(BLUE)Start Marimo server...$(RESET)\n"
 	@uv pip install marimo
-	@uv run marimo edit notebooks
+	@uv run marimo edit book/marimo
 
-slides: install
-	@uv pip install marimo
-	@uv run marimo export html notebooks/monkey.py -o slides.html
+#slides: install
+#	@uv pip install marimo
+#	@uv run marimo export html notebooks/monkey.py -o slides.html
 
 ##@ Help
 

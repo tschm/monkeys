@@ -1,22 +1,25 @@
-name: Install Dependencies with UV
+name: "Marimo Notebooks"
+# Workflow for running marimo notebooks
+# This workflow runs all marimo notebooks in the book/marimo directory
+# to ensure they execute without errors.
 
-# Trigger the workflow on push events
-# This ensures the documentation is automatically updated whenever code changes are pushed to main
 on:
-  push:
-    branches:
-      - main
+  push:  # Triggered on every push to the repository
 
 permissions:
-  contents: read
+  contents: read  # Read-only access to repository contents
 
 jobs:
-  marimo:
-    runs-on: ubuntu-latest
+  run-notebooks:
+    name: Run Marimo Notebooks
+    runs-on: ubuntu-latest  # Run on Ubuntu
+
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: tschm/cradle/actions/environment@v0.1.71
 
-      - uses: tschm/cradle/actions/marimo@v0.1.71
-        with:
-          source_folder: 'notebooks'
+      - name: Run notebooks
+        run: |
+          uv pip install --no-cache-dir marimo
+          cd book/marimo
+          uv run python "monkey.py"

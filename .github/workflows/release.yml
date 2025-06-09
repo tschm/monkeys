@@ -1,17 +1,24 @@
+# This workflow is responsible for bumping the version and publishing a new release
+# It creates a new tag based on the repository's commit history
+
 name: Bump version and publish
 
 on:
+  # This workflow is triggered manually via the GitHub UI
   workflow_dispatch:
 
 
 jobs:
   tag:
+    # The job requires write permissions to repository contents to create tags
     permissions:
       contents: write
 
+    # The job runs on the latest Ubuntu runner
     runs-on: ubuntu-latest
 
     steps:
+      # This step generates a new tag based on the commit history
       - name: Generate Tag
         uses: tschm/cradle/actions/tag@v0.1.71
         with:

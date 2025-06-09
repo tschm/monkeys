@@ -1,0 +1,64 @@
+# Workflow for building and deploying the Jupyter Book documentation
+# This workflow is triggered on push events and performs the following tasks:
+# 1. Builds Marimo notebooks and exports them to HTML
+# 2. Builds Jupyter notebooks into a book
+# 3. Combines all artifacts and deploys them to GitHub Pages
+
+name: deploy-book
+
+# Trigger the workflow on push events
+# This ensures the documentation is automatically updated whenever code changes are pushed
+on:
+  push:
+    branches:
+      - main
+
+
+# This workflow contains multiple jobs that run in parallel and sequentially
+jobs:
+  # Job to build Marimo interactive notebooks and export them to HTML
+  # This converts Python files in the book/marimo directory to interactive web pages
+  marimo:
+    runs-on: ubuntu-latest
+    steps:
+      # Set up the Python virtual environment with all required dependencies
+      # This uses a reusable action from the cradle repository
+      - name: "Build the virtual environment for ${{ github.repository }}"
+        uses: tschm/cradle/actions/environment@v0.1.71
+
+      # Find all Experiment*.py files in the book/marimo directory and export them to HTML
+      # This creates static HTML versions of the interactive notebooks
+      - name: "Export notebooks"
+        uses: tschm/cradle/actions/marimo@main
+        with:
+          command: 'export html-wasm "$file" -o "artifacts/marimo/${filename}/index.html" --mode edit'
+
+  # Job to build the Jupyter Book documentation
+  # This converts Jupyter notebooks to a static website with navigation
+  jupyter:
+    runs-on: "ubuntu-latest"
+    steps:
+      # Set up the Python virtual environment with all required dependencies
+      # This uses a reusable action from the cradle repository
+      - name: "Build the virtual environment for ${{ github.repository }}"
+        uses: tschm/cradle/actions/environment@v0.1.71
+
+      # Build the Jupyter Book using a reusable action
+      # This action handles the book building process including configuration
+      - uses: tschm/cradle/actions/jupyter@v0.1.71
+
+  # Job to combine all artifacts and prepare them for deployment
+  # This job runs after both jupyter and marimo jobs have completed
+  build:
+    permissions:
+      pages: write            # Permission to deploy to Pages
+      id-token: write         # Permission to verify deployment origin
+    runs-on: ubuntu-latest
+    needs: [jupyter, marimo]  # This job depends on both jupyter and marimo jobs
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish book
+        id: deployment
+        uses: tschm/cradle/actions/book@v0.1.71
