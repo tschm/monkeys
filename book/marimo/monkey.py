@@ -12,12 +12,9 @@ with app.setup:
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
-    # import plotly
-
-    # pd.options.plotting.backend = "plotly"
 
     path = mo.notebook_location()
-    print(path)
+    print(f"Location of the notebook: {path}")
 
     # load price data
     prices_file = str(path / "public" / "stock-prices-new.csv")
@@ -27,9 +24,6 @@ with app.setup:
     # Convert all other columns to float64
     for col in prices.columns:
         prices[col] = pd.to_numeric(prices[col], errors="coerce").astype("float64")
-
-    print(prices)
-    print(prices.dtypes)
 
 
 @app.cell
@@ -62,12 +56,6 @@ def _():
 
     # The monkey starts with 1m USD
     b = Builder(prices=prices, initial_aum=1e6)
-
-    # For each asset the first and the last valid index
-    print(b.intervals)
-    # An asset is valid if there are no NaNs in the interval above
-    print(b.valid)
-    print(b.prices.columns)
 
     rng = np.random.default_rng(0)
 
