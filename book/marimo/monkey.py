@@ -23,7 +23,7 @@ with app.setup:
     # load price data
     prices_file = str(path / "public" / "stock-prices-new.csv")
 
-    prices = pl.read_csv(prices_file).to_pandas().set_index("Date")
+    prices = pl.read_csv(prices_file, try_parse_dates=True).to_pandas().set_index("Date")
 
 
 @app.cell
