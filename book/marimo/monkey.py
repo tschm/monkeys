@@ -6,9 +6,16 @@ app = marimo.App()
 with app.setup:
     import marimo as mo
     import numpy as np
-    import pandas as pd
+    import plotly.io as pio
 
-    pd.options.plotting.backend = "plotly"
+    # import pandas as pd
+    import polars as pl
+
+    # Ensure Plotly works with Marimo
+    pio.renderers.default = "plotly_mimetype"
+    # import plotly
+
+    # pd.options.plotting.backend = "plotly"
 
     path = mo.notebook_location()
     print(path)
@@ -16,7 +23,7 @@ with app.setup:
     # load price data
     prices_file = str(path / "public" / "stock-prices-new.csv")
 
-    prices = pd.read_csv(prices_file, index_col=0, parse_dates=True, header=0)
+    prices = pl.read_csv(prices_file).to_pandas().set_index("Date")
 
 
 @app.cell
