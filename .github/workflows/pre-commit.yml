@@ -13,4 +13,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # This step executes pre-commit checks using a reusable action
-      - uses: tschm/cradle/actions/pre-commit@v0.1.71
+      - uses: tschm/cradle/actions/pre-commit@v0.1.72
