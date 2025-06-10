@@ -26,7 +26,7 @@ with app.setup:
     for col in prices.columns:
         prices[col] = pd.to_numeric(prices[col], errors="coerce").astype("float64")
 
-    print("Version of cvxsimulator: ", sim.__version__())
+    print("Version of cvxsimulator: ", sim.__version__)
 
 
 @app.cell
@@ -53,7 +53,7 @@ def _():
         b.aum = state.aum
 
     portfolio = b.build()
-    return portfolio
+    return (portfolio,)
 
 
 @app.cell
