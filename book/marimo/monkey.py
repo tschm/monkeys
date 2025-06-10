@@ -4,6 +4,7 @@ __generated_with = "0.13.15"
 app = marimo.App()
 
 with app.setup:
+    import cvxsimulator as sim
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -25,6 +26,8 @@ with app.setup:
     for col in prices.columns:
         prices[col] = pd.to_numeric(prices[col], errors="coerce").astype("float64")
 
+    print("Version of cvxsimulator: ", sim.__version__())
+
 
 @app.cell
 def _():
@@ -32,30 +35,10 @@ def _():
     return
 
 
-@app.cell(hide_code=True)
-async def _():
-    # | hide_cell
-    import sys
-
-    is_wasm = sys.platform == "emscripten"
-
-    print(f"WASM notebook: {is_wasm}")
-
-    if is_wasm:
-        import micropip
-
-        # install the cvxcla package from PyPI
-        await micropip.install("cvxsimulator")
-
-    return
-
-
 @app.cell
 def _():
-    from cvx.simulator import Builder
-
     # The monkey starts with 1m USD
-    b = Builder(prices=prices, initial_aum=1e6)
+    b = sim.Builder(prices=prices, initial_aum=1e6)
 
     rng = np.random.default_rng(0)
 
