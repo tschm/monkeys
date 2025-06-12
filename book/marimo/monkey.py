@@ -1,3 +1,15 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "marimo==0.13.15",
+#     "polars==1.30.0",
+#     "pandas==2.3.0",
+#     "numpy==2.3.0",
+#     "plotly==6.1.2",
+#     "cvxsimulator==1.4.3"
+# ]
+# ///
+
 import marimo
 
 __generated_with = "0.13.15"
