@@ -1,43 +1,149 @@
-# [monkeys](https://tschm.github.io/monkeys/book)
+# [Monkeys](https://tschm.github.io/monkeys/book)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CodeFactor](https://www.codefactor.io/repository/github/tschm/monkeys/badge)](https://www.codefactor.io/repository/github/tschm/monkeys)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://github.com/renovatebot/renovate)
+[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/release/python-3130/)
+[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://tschm.github.io/monkeys/book)
+
+[![Book](https://img.shields.io/github/actions/workflow/status/tschm/monkeys/book.yml?label=book)](https://github.com/tschm/monkeys/actions/workflows/book.yml)
+[![Marimo](https://img.shields.io/github/actions/workflow/status/tschm/monkeys/marimo.yml?label=marimo)](https://github.com/tschm/monkeys/actions/workflows/marimo.yml)
+[![Pre-commit](https://img.shields.io/github/actions/workflow/status/tschm/monkeys/pre-commit.yml?label=pre-commit)](https://github.com/tschm/monkeys/actions/workflows/pre-commit.yml)
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/tschm/monkeys)
 
-It is well known that Monkeys often outperform asset managers.
+## Table of Contents
 
-In this context we assume a monkey is managing a fully invested long only portfolio.
-We give the monkey a universe of $n$ assets.
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
 
-He picks asset $i$ with a probability of $p_i$
-with $\sum p_i = 1$.
+## Overview
 
-So every time the monkey is rebalancing the portfolio he assigns in
-a first step the weights $w_i = p_i * X_i$ where $X_i$ is a standard uniform
-random variable. In a second step he rescales the portfolio to enforce
-being fully invested.
+It is well known that monkeys often outperform asset managers. This project simulates
+random portfolio allocation strategies (our "monkeys") and compares their performance
+to traditional investment approaches.
 
-Using $p_i=1/n$ would give every asset the same underlying probability
-and hence the resulting portfolio introduces a small-cap bias relative
-to standard cap-weighted index.
+In this context, we assume a monkey is managing a fully invested long-only portfolio.
+We give the monkey a universe of *n* assets.
 
-Using $p_i$ proportional to the capitalisation of the underlying assets
-we stay closer to the index. The fun starts if we use now millions of monkeys
-and compare their consensus with the index.
+The monkey picks asset *i* with a probability of *p_i*, where Σ*p_i* = 1.
 
-We perform a variety of experiments. Note that assets may come and may disappear
-in the period we run a test over. If a monkey holds a position in a stock
-disappearing he is losing all money invested in that particular stock.
-So when we say $n$ stocks we keep in mind that $n$ is not constant over time.
+Every time the monkey rebalances the portfolio, it first assigns weights
+*w_i* = *p_i* × *X_i* where *X_i* is a standard uniform random variable. In a second
+step, it rescales the portfolio to ensure it remains fully invested.
 
-## Environment
+## Features
 
-Create the virtual environment with
+- Simulation of random portfolio allocation strategies
+- Comparison of monkey portfolios against market indices
+- Analysis of portfolio performance metrics
+- Interactive visualizations using Marimo notebooks
+- Historical stock price data acquisition
+
+## Installation
+
+The project uses [uv](https://github.com/astral-sh/uv) for package management.
 
 ```bash
-make install
+# Clone the repository
+git clone https://github.com/tschm/monkeys.git
+cd monkeys
 ```
 
-to install all dependencies listed in requirements.txt
+Explore your options with pre-defined targets
+
+```bash
+make
+```
+
+### Marimo Dependency Management
+
+Marimo notebooks in this project use Marimo's built-in dependency management system,
+which automatically installs required packages on the fly within isolated sandboxes.
+This approach has several benefits:
+
+- No need to install all dependencies globally
+- Each notebook manages its own dependencies independently
+- Sandboxed environments prevent package conflicts
+- Easy to add or update dependencies without affecting other notebooks
+
+#### How It Works
+
+Each Marimo notebook (.py file) includes a special comment block at the top that
+specifies its dependencies:
+
+```python
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "marimo==0.13.15",
+#     "pandas==2.3.0",
+#     "numpy==2.3.0",
+#     "plotly==6.1.2"
+# ]
+# ///
+```
+
+When you run a notebook with the `--sandbox` flag (which the Makefile includes),
+Marimo automatically:
+
+1. Creates an isolated virtual environment for the notebook
+2. Installs all specified dependencies in that environment
+3. Runs the notebook using the sandboxed environment
+
+#### Creating New Notebooks
+
+When creating new notebooks, simply include a similar dependency block at the top
+of your file with the packages you need.
+
+## Usage
+
+The project includes interactive Marimo notebooks for data acquisition and portfolio
+simulation:
+
+### Download Stock Prices
+
+```bash
+make marimo NOTEBOOK=download_prices.py
+```
+
+### Run Monkey Portfolio Simulation
+
+```bash
+make marimo NOTEBOOK=monkey.py
+```
+
+### Code Formatting and Linting
+
+```bash
+make fmt
+```
+
+## Documentation
+
+Comprehensive documentation is available at
+[https://tschm.github.io/monkeys/book](https://tschm.github.io/monkeys/book).
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch
+   (`git checkout -b feature/amazing-feature`)
+3. Run the formatters and linters (`make fmt`)
+4. Commit your changes
+   (`git commit -m 'Add some amazing feature'`)
+5. Push to the branch
+   (`git push origin feature/amazing-feature`)
+6. Open a Pull Request
+
+## License
+
+This project is licensed under the
+MIT License - see the [LICENSE](LICENSE) file for details.

@@ -1,3 +1,12 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "marimo==0.13.15",
+#     "pandas==2.3.0",
+#     "yfinance==0.2.62",
+# ]
+# ///
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -13,7 +22,7 @@ with app.setup:
 def _():
     mo.md(
         r"""
-    # Download Stock Close Prices
+    ## Download Stock Close Prices
 
     This notebook downloads historical close prices for a list of stock tickers using the yfinance library.
     """
@@ -52,7 +61,7 @@ def _():
     # Display the tickers
     mo.md(f"## Tickers to download: {len(tickers)}")
     print(tickers)
-    return tickers
+    return (tickers,)
 
 
 @app.cell
