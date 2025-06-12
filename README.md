@@ -109,13 +109,13 @@ simulation:
 ### Download Stock Prices
 
 ```bash
-make marimo NOTEBOOK=download_prices.py
+make download
 ```
 
 ### Run Monkey Portfolio Simulation
 
 ```bash
-make marimo NOTEBOOK=monkey.py
+make demo
 ```
 
 ### Code Formatting and Linting
