@@ -21,27 +21,48 @@ jobs:
   marimo:
     runs-on: ubuntu-latest
     steps:
-      # Set up the Python virtual environment with all required dependencies
-      # This uses a reusable action from the cradle repository
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+      # Check out the repository code
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
 
-      # Find all Experiment*.py files in the book/marimo directory and export them to HTML
-      # This creates static HTML versions of the interactive notebooks
-      - name: "Export notebooks"
-        uses: tschm/cradle/actions/marimo@main
+      - name: Install the latest version of uv and set the python version
+        uses: astral-sh/setup-uv@v6
         with:
-          command: 'export html-wasm "$file" -o "artifacts/marimo/${filename}/index.html" --mode edit'
+          python-version: 3.13
+
+      # Convert all Marimo notebooks to HTML-WASM format
+      # The WASM format allows for interactive elements to work in the browser
+      - name: Convert notebooks to HTML-WASM
+        run: |
+          # uv run pip install --no-cache-dir marimo
+          mkdir -p artifacts/marimo
+
+          # Find all Python files in the notebooks directory and export them to HTML-WASM
+          for notebook in book/marimo/*.py; do
+            # Extract the filename without extension
+            filename=$(basename "$notebook" .py)
+            echo "Exporting $notebook to HTML-WASM..."
+
+            # Create output directory for this notebook
+            mkdir -p artifacts/marimo/$filename
+
+            # Export in edit mode to allow users to modify the notebook
+            uvx marimo export html-wasm $notebook -o artifacts/marimo/$filename/index.html --sandbox --mode edit
+          done
+
+          # List all exported notebooks
+          echo "Exported notebooks:"
+          ls -la artifacts/marimo/
+
 
   # Job to build the Jupyter Book documentation
   # This converts Jupyter notebooks to a static website with navigation
   jupyter:
     runs-on: "ubuntu-latest"
     steps:
-      # Set up the Python virtual environment with all required dependencies
-      # This uses a reusable action from the cradle repository
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+      # Check out the repository code
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
 
       # Build the Jupyter Book using a reusable action
       # This action handles the book building process including configuration
