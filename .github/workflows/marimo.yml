@@ -27,4 +27,7 @@ jobs:
       - name: Run notebooks
         run: |
           cd book/marimo
-          uvx marimo run --sandbox "monkey.py"
+          uvx marimo run "monkey.py" --sandbox --no-browser &
+          pid=$!
+          sleep 1
+          kill $pid
