@@ -5,18 +5,14 @@ RESET := \033[0m
 
 .DEFAULT_GOAL := help
 
-.PHONY: help verify install fmt test marimo clean
+.PHONY: help fmt marimo clean
 
 ##@ Development Setup
 
 venv:
 	@printf "$(BLUE)Creating virtual environment...$(RESET)\n"
 	@curl -LsSf https://astral.sh/uv/install.sh | sh
-	@uv venv --python 3.12
-
-install: venv ## Install all dependencies using uv
-	@printf "$(BLUE)Installing dependencies...$(RESET)\n"
-	@uv pip install -r requirements.txt
+	#@uv venv --python 3.12
 
 ##@ Code Quality
 
@@ -24,13 +20,6 @@ fmt: venv ## Run code formatting and linting
 	@printf "$(BLUE)Running formatters and linters...$(RESET)\n"
 	@uvx pre-commit install
 	@uvx pre-commit run --all-files
-
-##@ Testing
-
-test: install ## Run all tests
-	@printf "$(BLUE)Running tests...$(RESET)\n"
-	@uv pip install pytest
-	@uv run pytest src/tests
 
 ##@ Cleanup
 
@@ -40,14 +29,9 @@ clean: ## Clean generated files and directories
 
 ##@ Marimo & Jupyter
 
-marimo: install ## Start a Marimo server
+marimo: venv ## Start a Marimo server
 	@printf "$(BLUE)Start Marimo server...$(RESET)\n"
-	@uv pip install marimo
-	@uv run marimo edit book/marimo
-
-#slides: install
-#	@uv pip install marimo
-#	@uv run marimo export html notebooks/monkey.py -o slides.html
+	@uvx marimo edit --sandbox book/marimo/$(NOTEBOOK)
 
 ##@ Help
 
