@@ -6,7 +6,9 @@
 [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/release/python-3130/)
 [![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://tschm.github.io/monkeys/book)
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/tschm/monkeys)
+[![Book](https://img.shields.io/github/actions/workflow/status/tschm/monkeys/book.yml?label=book)](https://github.com/tschm/monkeys/actions/workflows/book.yml)
+[![Marimo](https://img.shields.io/github/actions/workflow/status/tschm/monkeys/marimo.yml?label=marimo)](https://github.com/tschm/monkeys/actions/workflows/marimo.yml)
+[![Pre-commit](https://img.shields.io/github/actions/workflow/status/tschm/monkeys/pre-commit.yml?label=pre-commit)](https://github.com/tschm/monkeys/actions/workflows/pre-commit.yml)
 
 ## Table of Contents
 
