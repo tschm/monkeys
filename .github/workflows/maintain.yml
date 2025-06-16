@@ -20,7 +20,7 @@ jobs:
   test-notebooks:
     uses: tschm/marimushka/.github/workflows/test.yml@v0.0.16
     with:
-      notebook-dir: book/marimo
+      notebook-dir: notebooks
 
   test-apps:
     uses: tschm/marimushka/.github/workflows/test.yml@v0.0.16
