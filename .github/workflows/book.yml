@@ -24,7 +24,8 @@ jobs:
     steps:
       - uses: tschm/marimushka/actions/export@v0.0.16
         with:
-          notebooks: book/marimo
+          notebooks: notebooks
+          apps: apps
 
   # Job to build the Jupyter Book documentation
   # This converts Jupyter notebooks to a static website with navigation
