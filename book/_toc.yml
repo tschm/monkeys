@@ -3,5 +3,5 @@
 format: jb-book
 root: docs/index
 chapters:
-    - url: https://tschm.github.io/monkeys/marimo/monkey/index.html
+    - url: https://tschm.github.io/monkeys/marimo/notebooks/monkey.html
       title: Monkeys
