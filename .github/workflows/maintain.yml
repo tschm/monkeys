@@ -18,11 +18,11 @@ jobs:
       - uses: tschm/cradle/actions/pre-commit@v0.1.72
 
   test-notebooks:
-    uses: tschm/marimushka/.github/workflows/test.yml@v0.0.16
+    uses: tschm/marimushka/.github/workflows/test.yml@v0.0.17
     with:
       notebook-dir: notebooks
 
   test-apps:
-    uses: tschm/marimushka/.github/workflows/test.yml@v0.0.16
+    uses: tschm/marimushka/.github/workflows/test.yml@v0.0.17
     with:
       notebook-dir: apps
