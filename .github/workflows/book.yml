@@ -24,7 +24,8 @@ jobs:
     steps:
       - uses: jebel-quant/marimushka/@v0.1.1
         with:
-          notebooks: notebooks
+          notebooks-wasm: notebooks
+          notebooks: ''
           apps: apps
 
   # Job to combine all artifacts and prepare them for deployment
