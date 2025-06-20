@@ -97,19 +97,8 @@ of your file with the packages you need.
 
 ## Usage
 
-The project includes interactive Marimo notebooks for data acquisition and portfolio
-simulation:
-
-### Download Stock Prices
-
 ```bash
-make download
-```
-
-### Run Monkey Portfolio Simulation
-
-```bash
-make demo
+make marimo
 ```
 
 ### Code Formatting and Linting

@@ -23,3 +23,35 @@ jobs:
         uses: tschm/cradle/actions/tag@v0.1.72
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  # Job to build Marimo interactive notebooks and export them to HTML
+  # This converts Python files in the notebooks directory
+  # to interactive web pages
+  # The build job exports marimo notebooks to static HTML/WebAssembly
+  # into the folder artifacts/marimushka
+  marimo:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    permissions:
+      contents: read
+    steps:
+      - uses: jebel-quant/marimushka/@v0.1.1
+        with:
+          notebooks_wasm: notebooks
+          notebooks: ''
+          apps: notebooks
+
+  # Job to combine all artifacts and prepare them for deployment
+  # This job runs after the marimo job has completed
+  build:
+    permissions:
+      pages: write            # Permission to deploy to Pages
+      id-token: write         # Permission to verify deployment origin
+    runs-on: ubuntu-latest
+    needs: [marimo]           # This job depends on both jupyter and marimo jobs
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish book    # specify the path to avoid direct exposure of marimushka
+        id: deployment
+        uses: tschm/cradle/actions/book@v0.1.72

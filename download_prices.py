@@ -1,37 +1,18 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "marimo==0.13.15",
+#     #"marimo==0.13.15",
 #     "pandas==2.3.0",
 #     "yfinance==0.2.62",
 # ]
 # ///
+import pathlib
 
-import marimo
-
-__generated_with = "0.13.15"
-app = marimo.App()
-
-with app.setup:
-    import marimo as mo
-    import pandas as pd
-    import yfinance as yf
+import pandas as pd
+import yfinance as yf
 
 
-@app.cell
-def _():
-    mo.md(
-        r"""
-    ## Download Stock Close Prices
-
-    This notebook downloads historical close prices for a list of stock tickers using the yfinance library.
-    """
-    )
-    return
-
-
-@app.cell
-def _():
+def tickers():
     # Define the list of tickers
     tickers = [
         "GOOG",
@@ -56,21 +37,20 @@ def _():
         "SBUX",
     ]
 
-    # tickers = ['GOOG', 'AAPL', 'META']
-
     # Display the tickers
-    mo.md(f"## Tickers to download: {len(tickers)}")
+    print(f"## Tickers to download: {len(tickers)}")
     print(tickers)
-    return (tickers,)
+    return tickers
 
 
-@app.cell
-def _(tickers):
+def prices(tickers=None):
     # Download historical data for all tickers
     # Using 5 years of data by default
-    mo.md("## Downloading historical data...")
+    # mo.md("## Downloading historical data...")
 
     all_data = {}
+    tickers = tickers or tickers()
+
     for ticker in tickers:
         print(f"Downloading {ticker}...")
         try:
@@ -96,30 +76,23 @@ def _(tickers):
     close_prices = pd.DataFrame(all_data)
 
     # Display info about the downloaded data
-    mo.md(f"## Downloaded data for {len(all_data)} tickers")
-    mo.md(f"Date range: {close_prices.index.min()} to {close_prices.index.max()}")
-    mo.md(f"Number of data points: {len(close_prices)}")
+    print(f"## Downloaded data for {len(all_data)} tickers")
+    print(f"Date range: {close_prices.index.min()} to {close_prices.index.max()}")
+    print(f"Number of data points: {len(close_prices)}")
 
-    return (close_prices,)
-
-
-@app.cell
-def _(close_prices):
-    # Display the first few rows of the data
-    mo.md("## Preview of close prices")
-    close_prices.head()
-    return
+    return close_prices
 
 
-@app.cell
-def _(close_prices):
+def save(close_prices):
     # Save the data to a CSV file
-    output_file = str(mo.notebook_location() / "public" / "stock-prices-new.csv")
+    output_file = str(pathlib.Path(__file__).resolve().parent / "notebooks" / "public" / "downloads.csv")
+
+    #    mo.notebook_location() / "public" / "stock-prices-new.csv")
     close_prices.to_csv(output_file)
 
-    mo.md(f"## Data saved to {output_file}")
+    print(f"## Data saved to {output_file}")
     return
 
 
-if __name__ == "__main__":
-    app.run()
+# todo: there is no need to make this a marimo app.
+# Just use uv run download_prices.py

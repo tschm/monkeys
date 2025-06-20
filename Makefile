@@ -5,7 +5,7 @@ RESET := \033[0m
 
 .DEFAULT_GOAL := help
 
-.PHONY: help fmt demo download clean uv marimo
+.PHONY: help fmt clean uv marimo
 
 ##@ Development Setup
 
@@ -23,14 +23,8 @@ fmt: uv ## Run code formatting and linting
 ##@ Marimo Notebooks
 
 marimo: uv ##! Start a Marimo server with specified notebook (usage: make marimo NOTEBOOK=filename.py)
-	@printf "$(BLUE)Starting Marimo server for $(NOTEBOOK)...$(RESET)\n"
-	@uvx marimo edit --sandbox book/marimo/$(NOTEBOOK)
-
-demo: ## Run the monkey portfolio simulation notebook
-	@$(MAKE) marimo NOTEBOOK=monkey.py
-
-download: ## Run the price download notebook
-	@$(MAKE) marimo NOTEBOOK=download_prices.py
+	@printf "$(BLUE)Starting Marimo server for monkey.py$(RESET)\n"
+	@uvx marimo edit --sandbox notebooks/monkey.py
 
 ##@ Cleanup
 
