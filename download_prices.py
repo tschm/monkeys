@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     #"marimo==0.13.15",
+#     "loguru==0.7.0",
 #     "pandas==2.3.0",
 #     "yfinance==0.2.62",
 # ]
@@ -10,9 +10,10 @@ import pathlib
 
 import pandas as pd
 import yfinance as yf
+from loguru import logger
 
 
-def tickers():
+def _tickers():
     # Define the list of tickers
     tickers = [
         "GOOG",
@@ -38,8 +39,8 @@ def tickers():
     ]
 
     # Display the tickers
-    print(f"## Tickers to download: {len(tickers)}")
-    print(tickers)
+    logger.info(f"## Tickers to download: {len(tickers)}")
+    logger.info(tickers)
     return tickers
 
 
@@ -49,10 +50,10 @@ def prices(tickers=None):
     # mo.md("## Downloading historical data...")
 
     all_data = {}
-    tickers = tickers or tickers()
+    tickers = tickers or _tickers()
 
     for ticker in tickers:
-        print(f"Downloading {ticker}...")
+        logger.info(f"Downloading {ticker}...")
         try:
             # Download with adjusted prices
             data = yf.download(ticker, start="1990-01-01", progress=False, auto_adjust=True)
@@ -65,20 +66,20 @@ def prices(tickers=None):
                 if isinstance(close_series, pd.Series):
                     all_data[ticker] = close_series
                 else:
-                    print(f"⚠️ Close price for {ticker} is not a Series.")
+                    logger.warn(f"⚠️ Close price for {ticker} is not a Series.")
             else:
-                print(f"⚠️ Invalid or empty data for {ticker}")
+                logger.warn(f"⚠️ Invalid or empty data for {ticker}")
 
         except Exception as e:
-            print(f"❌ Error downloading {ticker}: {e}")
+            logger.error(f"❌ Error downloading {ticker}: {e}")
 
     # Convert to DataFrame
     close_prices = pd.DataFrame(all_data)
 
     # Display info about the downloaded data
-    print(f"## Downloaded data for {len(all_data)} tickers")
-    print(f"Date range: {close_prices.index.min()} to {close_prices.index.max()}")
-    print(f"Number of data points: {len(close_prices)}")
+    logger.info(f"## Downloaded data for {len(all_data)} tickers")
+    logger.info(f"Date range: {close_prices.index.min()} to {close_prices.index.max()}")
+    logger.info(f"Number of data points: {len(close_prices)}")
 
     return close_prices
 
@@ -90,9 +91,13 @@ def save(close_prices):
     #    mo.notebook_location() / "public" / "stock-prices-new.csv")
     close_prices.to_csv(output_file)
 
-    print(f"## Data saved to {output_file}")
+    logger.info(f"## Data saved to {output_file}")
     return
 
 
 # todo: there is no need to make this a marimo app.
 # Just use uv run download_prices.py
+
+if __name__ == "__main__":
+    prices = prices()
+    save(prices)
