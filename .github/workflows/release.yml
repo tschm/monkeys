@@ -55,7 +55,7 @@ jobs:
       - name: Publish book    # specify the path to avoid direct exposure of marimushka
         id: deployment
         uses: tschm/cradle/actions/book@v0.1.75
-        with: 
+        with:
           title: "Monkeys"
           links: |
             {
