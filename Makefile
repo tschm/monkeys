@@ -17,7 +17,6 @@ uv: ##! Install uv package manager
 
 fmt: uv ## Run code formatting and linting
 	@printf "$(BLUE)Running formatters and linters...$(RESET)\n"
-	@uvx pre-commit install
 	@uvx pre-commit run --all-files
 
 ##@ Marimo Notebooks
