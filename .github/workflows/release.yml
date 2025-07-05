@@ -20,7 +20,7 @@ jobs:
     steps:
       # This step generates a new tag based on the commit history
       - name: Generate Tag
-        uses: tschm/cradle/actions/tag@v0.1.75
+        uses: tschm/cradle/actions/tag@v0.1.80
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: Publish book    # specify the path to avoid direct exposure of marimushka
         id: deployment
-        uses: tschm/cradle/actions/book@v0.1.75
+        uses: tschm/cradle/actions/book@v0.1.80
         with:
           title: "Monkeys"
           links: |
