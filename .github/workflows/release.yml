@@ -6,7 +6,11 @@ name: Bump version and publish
 on:
   # This workflow is triggered manually via the GitHub UI
   workflow_dispatch:
-
+    inputs:
+      tag:
+        description: 'Release tag (e.g. v1.2.3)'
+        required: true
+        type: string
 
 jobs:
   tag:
@@ -18,11 +22,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # This step generates a new tag based on the commit history
-      - name: Generate Tag
-        uses: tschm/cradle/actions/tag@v0.2.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4  # Check out the repository code
+
+      - name: Create and Push Tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a "${{ github.event.inputs.tag }}" -m "Release ${{ github.event.inputs.tag }}"
+          git push origin "${{ github.event.inputs.tag }}"
+
 
   # Job to build Marimo interactive notebooks and export them to HTML
   # This converts Python files in the notebooks directory
