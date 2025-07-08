@@ -35,7 +35,7 @@ jobs:
       - name: Create GitHub release with artifacts
         uses: softprops/action-gh-release@v2.3.2  # Third-party release action
         with:
-          token: ${{ inputs.github_token }}  # Token for authentication
+          token: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
           tag_name: ${{ inputs.tag }}        # Use the provided tag
           generate_release_notes: true       # Automatically generate notes from commits
 
@@ -62,9 +62,9 @@ jobs:
       pages: write            # Permission to deploy to Pages
       id-token: write         # Permission to verify deployment origin
     runs-on: ubuntu-latest
-    needs: 
+    needs:
       - marimo
-      - tagging 
+      - tagging
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
