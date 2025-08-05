@@ -9,6 +9,11 @@
 #     "cvxsimulator==1.4.3",
 # ]
 # ///
+"""Marimo notebook for simulating a random walk portfolio allocation strategy.
+
+This notebook loads historical stock price data, creates a portfolio simulation
+with random weights, and displays the performance metrics of the portfolio.
+"""
 
 import marimo
 
