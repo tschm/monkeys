@@ -6,6 +6,12 @@
 #     "yfinance==0.2.62",
 # ]
 # ///
+"""Download historical stock price data from Yahoo Finance.
+
+This module provides functionality to download historical stock price data
+for a predefined list of tickers, process the data, and save it to a CSV file.
+"""
+
 import pathlib
 
 import pandas as pd
@@ -45,6 +51,14 @@ def _tickers():
 
 
 def prices(tickers=None):
+    """Download historical price data for the specified tickers.
+
+    Args:
+        tickers: List of stock ticker symbols to download. If None, uses the default list.
+
+    Returns:
+        pandas.DataFrame: DataFrame containing close prices for all successfully downloaded tickers.
+    """
     # Download historical data for all tickers
     # Using 5 years of data by default
     # mo.md("## Downloading historical data...")
@@ -85,6 +99,14 @@ def prices(tickers=None):
 
 
 def save(close_prices):
+    """Save the downloaded price data to a CSV file.
+
+    Args:
+        close_prices: pandas.DataFrame containing the close prices to save.
+
+    Returns:
+        None
+    """
     # Save the data to a CSV file
     output_file = str(pathlib.Path(__file__).resolve().parent / "notebooks" / "public" / "downloads.csv")
 
