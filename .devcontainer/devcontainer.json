@@ -5,7 +5,8 @@
         "cpus": 4
     },
     "features": {
-        "ghcr.io/devcontainers/features/common-utils:2": {}
+        "ghcr.io/devcontainers/features/common-utils:2": {},
+        "ghcr.io/devcontainers-contrib/features/uv:1": {}
     },
     "forwardPorts": [8080],
     "customizations": {
@@ -25,7 +26,7 @@
             ]
         }
     },
-    "onCreateCommand": ".devcontainer/startup.sh",
-    "postStartCommand": "uvx run marimo --yes edit --host=localhost --port=8080 --headless --no-token notebooks/monkey.py",
-    "remoteUser": "vscode"
+    "onCreateCommand": "uv pip install --all-extras --system",
+    "postStartCommand": "uv run marimo --yes edit --host=localhost --port=8080 --headless --no-token notebooks/monkey.py",
+    "remoteUser": "vscode",
 }
