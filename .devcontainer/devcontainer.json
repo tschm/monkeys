@@ -1,20 +1,11 @@
 {
-    "name": "Marimo Dev Container",
-    "image": "docker.io/astral/uv:latest",
-    "hostRequirements": {
-        "cpus": 4
-    },
-    "forwardPorts": [8080],
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "ms-python.python",
-                "ms-python.vscode-pylance",
-                "marimo-team.vscode-marimo"
-            ]
-        }
-    },
-    "postCreateCommand": "uv pip install marimo",
-    "postStartCommand": "uv run marimo --yes edit --host=localhost --port=8080 --headless --no-token notebooks/monkey.py",
-    "remoteUser": "vscode",
+  "name": "Marimo Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "hostRequirements": {
+    "cpus": 4
+  },
+  "forwardPorts": [8080],
+  "postCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh && uv pip install marimo",
+  "postStartCommand": "uvx run marimo --yes edit --host=localhost --port=8080 --headless --no-token notebooks/monkey.py",
+  "remoteUser": "vscode"
 }
