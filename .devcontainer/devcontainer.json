@@ -6,7 +6,7 @@
     },
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {},
-        "ghcr.io/devcontainers-contrib/features/uv:1": {}
+        "ghcr.io/devcontainers/features/uv:1": {}
     },
     "forwardPorts": [8080],
     "customizations": {
