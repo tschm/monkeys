@@ -26,6 +26,6 @@
         }
     },
     "onCreateCommand": ".devcontainer/startup.sh",
-    "postStartCommand": "uvx run marimo --yes edit --host=localhost --port=8080 --headless --no-tokenm --sandbox notebooks/monkey",
+    "postStartCommand": "uvx run marimo --yes edit --host=localhost --port=8080 --headless --no-token notebooks/monkey.py",
     "remoteUser": "vscode"
 }
