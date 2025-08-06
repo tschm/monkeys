@@ -1,12 +1,11 @@
 {
     "name": "Marimo Dev Container",
-    "image": "mcr.microsoft.com/devcontainers/python:3.13",
+    "image": "docker.io/astral/uv:latest",
     "hostRequirements": {
         "cpus": 4
     },
     "features": {
-        "ghcr.io/devcontainers/features/common-utils:2": {},
-        "ghcr.io/va-h/devcontainers-features/uv:1": {}
+        "ghcr.io/devcontainers/features/common-utils:2": {}
     },
     "forwardPorts": [8080],
     "customizations": {
@@ -26,6 +25,7 @@
             ]
         }
     },
+    "postCreateCommand": "uv pip install marimo",
     "postStartCommand": "uv run marimo --yes edit --host=localhost --port=8080 --headless --no-token notebooks/monkey.py",
     "remoteUser": "vscode",
 }
