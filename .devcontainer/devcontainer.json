@@ -4,20 +4,9 @@
     "hostRequirements": {
         "cpus": 4
     },
-    "features": {
-        "ghcr.io/devcontainers/features/common-utils:2": {}
-    },
     "forwardPorts": [8080],
     "customizations": {
         "vscode": {
-            "settings": {
-                "python.linting.enabled": true,
-                "python.linting.pylintEnabled": true,
-                "python.testing.pytestEnabled": true,
-                "python.testing.unittestEnabled": false,
-                "python.testing.pytestArgs": ["."],
-                "python.terminal.activateEnvInCurrentTerminal": true,
-            },
             "extensions": [
                 "ms-python.python",
                 "ms-python.vscode-pylance",
