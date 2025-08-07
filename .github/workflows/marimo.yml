@@ -1,18 +1,22 @@
+# This workflow runs and tests all Marimo notebooks in the project
+# It creates a matrix of jobs, one for each notebook, and runs them in parallel
 name: "Marimo"
 
 on:
   push
 
 jobs:
-  # Parse .env and build matrix of notebooks
+  # Parse .env file and build a matrix of notebooks to test
   parse-env:
     runs-on: ubuntu-latest
     outputs:
       marimo-folder: ${{ steps.export.outputs.MARIMO_FOLDER }}
       notebook-list: ${{ steps.notebooks.outputs.matrix }}
     steps:
+      # Check out the repository code
       - uses: actions/checkout@v4
 
+      # Read environment variables from .env file if it exists
       - name: Parse .env and export variables
         id: export
         run: |
@@ -23,11 +27,10 @@ jobs:
             echo "WARNING: .env file not found"
           fi
           echo "MARIMO_FOLDER=${MARIMO_FOLDER:-book/marimo}" >> "$GITHUB_OUTPUT"
-          USE_UV_RUN=${USE_UV_RUN:-false}
-          echo "USE_UV_RUN=$USE_UV_RUN" >> "$GITHUB_OUTPUT"
           set +a
         shell: bash
 
+      # Find all Python files in the marimo folder and create a matrix for parallel execution
       - name: Find notebooks and build matrix
         id: notebooks
         run: |
@@ -37,7 +40,7 @@ jobs:
           echo "matrix=$notebooks" >> "$GITHUB_OUTPUT"
         shell: bash
 
-  # One job per notebook using matrix
+  # Create one job per notebook using the matrix strategy for parallel execution
   test-notebooks:
     runs-on: ubuntu-latest
     needs: parse-env
@@ -46,37 +49,27 @@ jobs:
         notebook: ${{ fromJson(needs.parse-env.outputs.notebook-list) }}
     name: Run notebook ${{ matrix.notebook }}
     steps:
+      # Check out the repository code
       - uses: actions/checkout@v4
 
+      # Set up Python environment with the specified version
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
+      # Install the uv package manager for Python dependencies
       - name: Install uv
         run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
-
-      - name: Set up virtualenv and install dependencies
-        run: |
-          set -e
-          uv venv .venv
-          if [ -f "pyproject.toml" ]; then
-            uv sync --all-extras
-          else
-            echo "No pyproject.toml found, skipping uv sync"
-          fi
+          make install
         shell: bash
 
+      # Execute the notebook with the appropriate runner based on its content
       - name: Run notebook
         run: |
-          set -e
-          source .venv/bin/activate
-          NOTEBOOK="${{ matrix.notebook }}"
-          echo "Running $NOTEBOOK"
-          
-          # Check if the notebook contains a SCRIPT section
+          # Check if the notebook contains a SCRIPT section with dependencies
+          # If it does, use uv run to handle dependencies automatically
+          # Otherwise, use standard python interpreter
           if grep -q "# /// script" "$NOTEBOOK"; then
             echo "SCRIPT section found, using uv run"
             uv run "$NOTEBOOK"
