@@ -84,9 +84,9 @@ def run_simulation():
     return portfolio
 
 
-with app.setup:
-    # Provide shared objects in app.setup context for UI
-    app.prices = prices
+# with app.setup:
+#    # Provide shared objects in app.setup context for UI
+#    app.prices = prices
 
 
 @app.cell
