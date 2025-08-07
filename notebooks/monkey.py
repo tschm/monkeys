@@ -84,11 +84,6 @@ def run_simulation():
     return portfolio
 
 
-# with app.setup:
-#    # Provide shared objects in app.setup context for UI
-#    app.prices = prices
-
-
 @app.cell
 def _():
     marimo.md("# A random walk down an equity portfolio")
