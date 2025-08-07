@@ -52,13 +52,17 @@ check: lint test ## Run all checks (lint and test)
 
 deptry: uv ## Run deptry (use OPTIONS="--your-options" to pass options)
 	@printf "$(BLUE)Running deptry...$(RESET)\n"
-	@uvx deptry $(SOURCE_FOLDER) $(OPTIONS)
+	@if [ -f "pyproject.toml" ]; then \
+		uvx deptry $(SOURCE_FOLDER) $(OPTIONS); \
+	else \
+		printf "$(BLUE)No pyproject.toml found, skipping deptry$(RESET)\n"; \
+	fi
 
 ##@ Testing
 
 test: install ## Run all tests
 	@printf "$(BLUE)Running tests...$(RESET)\n"
-	@uv pip install pytest
+	@uv pip install pytest pytest-cov python-dotenv
 	@uv run pytest $(TESTS_FOLDER) --cov=$(SOURCE_FOLDER) --cov-report=term
 
 ##@ Building
@@ -102,7 +106,7 @@ clean: ## Clean generated files and directories
 
 marimo: install ## Start a Marimo server
 	@printf "$(BLUE)Start Marimo server with $(MARIMO_FOLDER)...$(RESET)\n"
-	@uv run pip install marimo
+	@uv pip install marimo
 	@uv run marimo edit $(MARIMO_FOLDER)
 
 ##@ Help
