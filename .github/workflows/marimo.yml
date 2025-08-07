@@ -77,11 +77,11 @@ jobs:
       # Execute all Marimo notebooks to verify they run without errors
       - name: Run Marimo notebooks
         run: |
-          source .venv/bin/activate  # Activate the virtual environment
           NOTEBOOK_DIR="${{ needs.parse-env.outputs.marimo-folder }}"  # Get notebook directory from env parsing job
           echo "Looking for notebooks in $NOTEBOOK_DIR"
+          
           # Find all Python files in the notebook directory and execute them
           find "$NOTEBOOK_DIR" -name "*.py" | while read -r notebook; do
             echo "Running $notebook"
-            uv run marimo run "$notebook" --sandbox  # Execute the notebook
+            timeout 10s marimo run "$notebook"  # Execute the notebook
           done
