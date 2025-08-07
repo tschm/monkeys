@@ -52,12 +52,6 @@ jobs:
       # Check out the repository code
       - uses: actions/checkout@v4
 
-      # Set up Python environment with the specified version
-      # - name: Set up Python
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: '3.12'
-
       # Install the uv package manager for Python dependencies
       - name: Install uv
         run: |
