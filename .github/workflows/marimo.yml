@@ -1,88 +1,87 @@
-# Workflow: Marimo
-# Purpose: This workflow tests and validates Marimo notebooks to ensure
-#          they function correctly and maintain compatibility with the latest dependencies.
-#
-# Trigger: This workflow runs on pushes to the main branch and pull requests
-#
-# Components:
-#   - 📚 Parse .env file for configuration
-#   - 🧪 Test Marimo notebooks execution
 name: "Marimo"
 
-# Trigger workflow on any push to the repository
 on:
   push
 
 jobs:
-  # Job: parse-env
-  # Purpose: Reads configuration from .env file and makes it available to other jobs
+  # Parse .env and build matrix of notebooks
   parse-env:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read  # Only needs read access to repository contents
     outputs:
-      marimo-folder: ${{ steps.export.outputs.MARIMO_FOLDER }}  # Path to Marimo notebooks
+      marimo-folder: ${{ steps.export.outputs.MARIMO_FOLDER }}
+      notebook-list: ${{ steps.notebooks.outputs.matrix }}
     steps:
-      # Checkout the repository code
       - uses: actions/checkout@v4
 
       - name: Parse .env and export variables
         id: export
         run: |
-          set -a  # Export all variables automatically
-          source .env  # Load variables from .env file
-          echo "MARIMO_FOLDER=$MARIMO_FOLDER" >> "$GITHUB_OUTPUT"  # Make MARIMO_FOLDER available as output
-          set +a  # Turn off automatic export
+          set -a
+          if [ -f .env ]; then
+            source .env
+          else
+            echo "WARNING: .env file not found"
+          fi
+          echo "MARIMO_FOLDER=${MARIMO_FOLDER:-book/marimo}" >> "$GITHUB_OUTPUT"
+          USE_UV_RUN=${USE_UV_RUN:-false}
+          echo "USE_UV_RUN=$USE_UV_RUN" >> "$GITHUB_OUTPUT"
+          set +a
         shell: bash
 
-  # Job: test-notebooks
-  # Purpose: Executes all Marimo notebooks to verify they run without errors
+      - name: Find notebooks and build matrix
+        id: notebooks
+        run: |
+          NOTEBOOK_DIR="${{ steps.export.outputs.MARIMO_FOLDER }}"
+          echo "Searching notebooks in: $NOTEBOOK_DIR"
+          notebooks=$(find "$NOTEBOOK_DIR" -name "*.py" -print0 | xargs -0 -n1 echo | jq -R -s -c 'split("\n")[:-1]')
+          echo "matrix=$notebooks" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+  # One job per notebook using matrix
   test-notebooks:
     runs-on: ubuntu-latest
-    needs: parse-env  # Depends on parse-env job to get the MARIMO_FOLDER path
-    permissions:
-      contents: read  # Only needs read access to repository contents
+    needs: parse-env
+    strategy:
+      matrix:
+        notebook: ${{ fromJson(needs.parse-env.outputs.notebook-list) }}
+    name: Run notebook ${{ matrix.notebook }}
     steps:
-      # Checkout the repository code
       - uses: actions/checkout@v4
 
-      # Set up Python environment with specific version
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'  # Use Python 3.13 for testing
+          python-version: '3.12'
 
-      # Install uv package manager for faster dependency installation
       - name: Install uv
         run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh  # Download and install uv
-          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"  # Add uv to PATH
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
 
-      # Create virtual environment and install required dependencies
       - name: Set up virtualenv and install dependencies
         run: |
-          uv venv .venv  # Create a virtual environment using uv
-          source .venv/bin/activate  # Activate the virtual environment
-
-          # Conditionally install the package in development mode if pyproject.toml exists
+          set -e
+          uv venv .venv
           if [ -f "pyproject.toml" ]; then
-            echo "pyproject.toml found, installing editable package"
-            uv pip install -e .  # Install package in editable mode
+            uv sync --all-extras
           else
-            echo "No pyproject.toml found, skipping package install"
+            echo "No pyproject.toml found, skipping uv sync"
           fi
+        shell: bash
 
-          uv pip install marimo  # Install marimo for notebook execution
-
-      # Execute all Marimo notebooks to verify they run without errors
-      - name: Run Marimo notebooks
+      - name: Run notebook
         run: |
-          NOTEBOOK_DIR="${{ needs.parse-env.outputs.marimo-folder }}"  # Get notebook directory from env parsing job
-          echo "Looking for notebooks in $NOTEBOOK_DIR"
+          set -e
+          source .venv/bin/activate
+          NOTEBOOK="${{ matrix.notebook }}"
+          echo "Running $NOTEBOOK"
           
-          # Find all Python files in the notebook directory and execute them
-          find "$NOTEBOOK_DIR" -name "*.py" | while read -r notebook; do
-            echo "Running $notebook"
-            # python "$notebook"  # Execute the notebook
-            uv run "$notebook"  # Execute the notebook using uv
-          done
+          # Check if the notebook contains a SCRIPT section
+          if grep -q "# /// script" "$NOTEBOOK"; then
+            echo "SCRIPT section found, using uv run"
+            uv run "$NOTEBOOK"
+          else
+            echo "No SCRIPT section found, using python"
+            python "$NOTEBOOK"
+          fi
+        shell: bash
