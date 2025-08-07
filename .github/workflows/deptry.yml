@@ -27,6 +27,9 @@ jobs:
     #needs: parse-env
 
     steps:
+      # Check out the repository code
+      - uses: actions/checkout@v4
+
       - name: Run deptry
         run: |
           make deptry
