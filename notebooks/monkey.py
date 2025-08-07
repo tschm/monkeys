@@ -16,6 +16,8 @@ This module demonstrates the use of cvxsimulator to create and analyze
 a portfolio with random weights for a set of equities.
 """
 
+from pathlib import Path
+
 import cvxsimulator as sim
 import marimo
 import numpy as np
@@ -38,7 +40,8 @@ def load_data():
     """
     pio.renderers.default = "plotly_mimetype"
 
-    path = marimo.notebook_location()
+    path = Path(__file__).parent
+    # path = marimo.notebook_location()
     prices_file = str(path / "public" / "stock-prices-new.csv")
 
     prices = pl.read_csv(prices_file, try_parse_dates=True).to_pandas().set_index("Date")
