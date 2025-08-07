@@ -38,7 +38,7 @@ def load_data():
     """
     pio.renderers.default = "plotly_mimetype"
 
-    path = marimo.mo.notebook_location()
+    path = marimo.notebook_location()
     prices_file = str(path / "public" / "stock-prices-new.csv")
 
     prices = pl.read_csv(prices_file, try_parse_dates=True).to_pandas().set_index("Date")
