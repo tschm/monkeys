@@ -83,5 +83,5 @@ jobs:
           # Find all Python files in the notebook directory and execute them
           find "$NOTEBOOK_DIR" -name "*.py" | while read -r notebook; do
             echo "Running $notebook"
-            timeout 10s marimo run "$notebook"  # Execute the notebook
+            timeout 10s uv run marimo run "$notebook"  # Execute the notebook
           done
