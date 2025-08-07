@@ -68,14 +68,22 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        if: hashFiles('pyproject.toml') != ''
-        uses: tschm/cradle/actions/environment@v0.3.06
+      # Check out the repository code
+      - uses: actions/checkout@v4
 
-      - uses: tschm/cradle/actions/pdoc@v0.3.06
+      - name: "Run pdoc"
         if: hashFiles('pyproject.toml') != ''
-        with:
-          source-folder: ${{ needs.parse-env.outputs.source-folder }}
+        run: |
+          make docs
+
+      #- name: "Build the virtual environment for ${{ github.repository }}"
+      #  if: hashFiles('pyproject.toml') != ''
+      #  uses: tschm/cradle/actions/environment@v0.3.06
+
+      #- uses: tschm/cradle/actions/pdoc@v0.3.06
+      #  if: hashFiles('pyproject.toml') != ''
+      #  with:
+      #    source-folder: ${{ needs.parse-env.outputs.source-folder }}
 
   test:
     if: github.repository != 'tschm/.config-templates'
@@ -84,15 +92,23 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        if: hashFiles('pyproject.toml') != ''
-        uses: tschm/cradle/actions/environment@v0.3.06
+      # Check out the repository code
+      - uses: actions/checkout@v4
 
-      - uses: tschm/cradle/actions/coverage@v0.3.06
+      - name: "Run test"
         if: hashFiles('pyproject.toml') != ''
-        with:
-          tests-folder: ${{ needs.parse-env.outputs.tests-folder }}
-          source-folder: ${{ needs.parse-env.outputs.source-folder }}
+        run: |
+          make test
+
+#      - name: "Build the virtual environment for ${{ github.repository }}"
+#        if: hashFiles('pyproject.toml') != ''
+#        uses: tschm/cradle/actions/environment@v0.3.06
+#
+#      - uses: tschm/cradle/actions/coverage@v0.3.06
+#        if: hashFiles('pyproject.toml') != ''
+#        with:
+#          tests-folder: ${{ needs.parse-env.outputs.tests-folder }}
+#          source-folder: ${{ needs.parse-env.outputs.source-folder }}
 
   book:
     if: github.repository != 'tschm/.config-templates'
