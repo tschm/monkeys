@@ -62,7 +62,11 @@ jobs:
         run: |
           set -e
           uv venv .venv
-          uv sync --all-extras
+          if [ -f "pyproject.toml" ]; then
+            uv sync --all-extras
+          else
+            echo "No pyproject.toml found, skipping uv sync"
+          fi
         shell: bash
 
       - name: Run notebook
