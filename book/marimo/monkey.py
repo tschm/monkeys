@@ -21,6 +21,8 @@ __generated_with = "0.14.16"
 app = marimo.App()
 
 with app.setup:
+    from pathlib import Path
+
     import cvxsimulator as sim
     import marimo
     import numpy as np
@@ -30,7 +32,8 @@ with app.setup:
 
     pio.renderers.default = "plotly_mimetype"
 
-    path = marimo.notebook_location()
+    # path = marimo.notebook_location()
+    path = Path(__file__).parent
 
     prices_file = str(path / "public" / "stock-prices-new.csv")
 
