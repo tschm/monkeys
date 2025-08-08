@@ -1,6 +1,8 @@
 # This workflow runs and tests all Marimo notebooks in the project
 # It creates a matrix of jobs, one for each notebook, and runs them in parallel
 name: "Marimo"
+permissions:
+  contents: read
 
 on:
   push
@@ -8,18 +10,34 @@ on:
 jobs:
   # Parse .env file and build a matrix of notebooks to test
   parse-env:
+    if: github.repository != 'tschm/.config-templates'
     runs-on: ubuntu-latest
     outputs:
+      marimo-folder: ${{ steps.export.outputs.MARIMO_FOLDER }}
       notebook-list: ${{ steps.notebooks.outputs.matrix }}
     steps:
       # Check out the repository code
       - uses: actions/checkout@v4
 
+      # Read environment variables from .env file if it exists
+      - name: Parse .env and export variables
+        id: export
+        run: |
+          set -a
+          if [ -f .env ]; then
+            source .env
+          else
+            echo "WARNING: .env file not found"
+          fi
+          echo "MARIMO_FOLDER=${MARIMO_FOLDER:-book/marimo}" >> "$GITHUB_OUTPUT"
+          set +a
+        shell: bash
+
       # Find all Python files in the marimo folder and create a matrix for parallel execution
       - name: Find notebooks and build matrix
         id: notebooks
         run: |
-          NOTEBOOK_DIR=book/marimo
+          NOTEBOOK_DIR="${{ steps.export.outputs.MARIMO_FOLDER }}"
           echo "Searching notebooks in: $NOTEBOOK_DIR"
           notebooks=$(find "$NOTEBOOK_DIR" -name "*.py" -print0 | xargs -0 -n1 echo | jq -R -s -c 'split("\n")[:-1]')
           echo "matrix=$notebooks" >> "$GITHUB_OUTPUT"
@@ -27,6 +45,7 @@ jobs:
 
   # Create one job per notebook using the matrix strategy for parallel execution
   test-notebooks:
+    if: github.repository != 'tschm/.config-templates'
     runs-on: ubuntu-latest
     needs: parse-env
     strategy:
