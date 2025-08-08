@@ -44,18 +44,6 @@ jobs:
         run: |
           make book
 
-#      - uses: tschm/cradle/actions/book@v0.3.06
-#        if: hashFiles('pyproject.toml') != ''
-#        with:
-#          title: ${{ needs.parse-env.outputs.title }}
-#          links: |
-#            {
-#              "API": "./pdoc/index.html",
-#              "Coverage": "./tests/html-coverage/index.html",
-#              "Test Report": "./tests/html-report/report.html",
-#              "Notebooks": "./marimushka/index.html"
-#            }
-#
       # Step 4: Display the structure of the artifacts directory
       # This helps with debugging by showing what files were generated
       - name: Inspect artifacts
@@ -68,15 +56,6 @@ jobs:
             echo "tree command not found, using fallback:"
             find _book -type f | sort
           fi
-
-#      - uses: tschm/cradle/actions/book@v0.3.06
-#        if: hashFiles('pyproject.toml') == ''
-#        with:
-#          title: ${{ needs.parse-env.outputs.title }}
-#          links: |
-#            {
-#              "Notebooks": "./marimushka/index.html"
-#            }
 
       # Step 5: Package all artifacts for GitHub Pages deployment
       # This prepares the combined outputs for deployment by creating a single artifact
