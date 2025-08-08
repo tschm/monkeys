@@ -7,15 +7,10 @@ BOLD := \033[1m
 GREEN := \033[32m
 RESET := \033[0m
 
--include .env
-ifneq (,$(wildcard .env))
-    export $(shell sed 's/=.*//' .env)
-endif
-
 # Default values if not set in .env
-SOURCE_FOLDER ?= src
-TESTS_FOLDER ?= src/tests
-MARIMO_FOLDER ?= book/marimo
+SOURCE_FOLDER := src
+TESTS_FOLDER := tests
+MARIMO_FOLDER := book/marimo
 OPTIONS ?=
 
 # Variables you can customize
