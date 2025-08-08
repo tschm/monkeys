@@ -1,9 +1,10 @@
 # /// script
 # dependencies = [
-#     "numpy",
-#     "pandas",
-#     "plotly",
-#     "polars",
+#     "marimo==0.14.16",
+#     "numpy==2.3.1",
+#     "pandas==2.3.0",
+#     "plotly==6.2.0",
+#     "polars==1.3.2",
 #     "cvxsimulator==1.4.3",
 # ]
 # ///
@@ -16,7 +17,7 @@ a portfolio with random weights for a set of equities.
 
 import marimo
 
-__generated_with = "0.13.15"
+__generated_with = "0.14.16"
 app = marimo.App()
 
 with app.setup:
