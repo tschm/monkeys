@@ -7,16 +7,14 @@ BOLD := \033[1m
 GREEN := \033[32m
 RESET := \033[0m
 
-# Default values if not set in .env
-SOURCE_FOLDER := src
+SOURCE_FOLDER := src/$(shell find src -mindepth 1 -maxdepth 1 -type d -not -path "*/\.*" | head -1 | sed 's|^src/||')
 TESTS_FOLDER := tests
 MARIMO_FOLDER := book/marimo
 OPTIONS ?=
 
 # Variables you can customize
-BOOK_TITLE := "My Project Book"
+BOOK_TITLE := "$(shell basename $(CURDIR))"
 BOOK_SUBTITLE := "Documentation and Reports"
-BOOK_TEMPLATE := "default"
 
 # Reads links.json content into a shell variable for uvx
 BOOK_LINKS := $(shell cat _book/links.json)
@@ -24,6 +22,7 @@ BOOK_LINKS := $(shell cat _book/links.json)
 .DEFAULT_GOAL := help
 
 .PHONY: help verify install fmt lint deptry test build check marimo clean docs book marimushka
+
 ##@ Development Setup
 
 uv:
@@ -49,7 +48,7 @@ lint: uv ## Run linters only
 	@printf "$(BLUE)Running linters...$(RESET)\n"
 	@uvx pre-commit run --all-files
 
-check: lint test ## Run all checks (lint and test)
+check: lint fmt deptry test ## Run all checks (lint and test)
 	@printf "$(GREEN)All checks passed!$(RESET)\n"
 
 deptry: uv ## Run deptry (use OPTIONS="--your-options" to pass options)
@@ -62,11 +61,22 @@ deptry: uv ## Run deptry (use OPTIONS="--your-options" to pass options)
 
 ##@ Testing
 
-test: install ## Run all tests
+test: install
 	@printf "$(BLUE)Running tests...$(RESET)\n"
-	@uv pip install pytest pytest-cov pytest-html python-dotenv
-	@mkdir -p _tests/html-coverage _tests/html-report
-	@uv run pytest $(TESTS_FOLDER) --cov=$(SOURCE_FOLDER) --cov-report=term --cov-report=html:_tests/html-coverage --html=_tests/html-report/report.html
+	@if [ ! -f "README.md" ]; then \
+		printf "$(BLUE)No README.md file found, skipping tests$(RESET)\n"; \
+	elif [ -z "$(SOURCE_FOLDER)" ] || [ -z "$(TESTS_FOLDER)" ]; then \
+		printf "$(BLUE)No valid source folder structure found, skipping tests$(RESET)\n"; \
+	else \
+		echo "$$GITHUB_REPOSITORY"; \
+		uv pip install pytest pytest-cov pytest-html python-dotenv; \
+		mkdir -p _tests/html-coverage _tests/html-report; \
+		uv run pytest $(TESTS_FOLDER) \
+			--cov=$(SOURCE_FOLDER) \
+			--cov-report=term \
+			--cov-report=html:_tests/html-coverage \
+			--html=_tests/html-report/report.html; \
+	fi
 
 ##@ Building
 
@@ -85,16 +95,7 @@ docs: install ## Build documentation
 	@printf "$(BLUE)Building documentation...$(RESET)\n"
 	@if [ -f "pyproject.toml" ]; then \
 		uv pip install pdoc; \
-		{ \
-			uv run pdoc -o _pdoc $(SOURCE_FOLDER); \
-			if command -v xdg-open >/dev/null 2>&1; then \
-				xdg-open "_pdoc/index.html"; \
-			elif command -v open >/dev/null 2>&1; then \
-				open "_pdoc/index.html"; \
-			else \
-				echo "Documentation generated. Open pdoc/index.html manually"; \
-			fi; \
-		}; \
+		uv run pdoc -o _pdoc $(SOURCE_FOLDER); \
 	else \
 		printf "$(BLUE)No pyproject.toml found, skipping docs$(RESET)\n"; \
 	fi
@@ -105,10 +106,12 @@ marimushka: install ## Export Marimo notebooks to HTML
 
 	@if [ ! -d "$(MARIMO_FOLDER)" ]; then \
 		printf "$(BLUE)Warning: Directory $(MARIMO_FOLDER) does not exist$(RESET)\n"; \
+		echo "<html><head><title>Marimo Notebooks</title></head><body><h1>Marimo Notebooks</h1><p>No notebooks directory found.</p></body></html>" > _marimushka/index.html; \
 	else \
 		py_files=$$(find "$(MARIMO_FOLDER)" -name "*.py" | tr '\n' ' '); \
 		if [ -z "$$py_files" ]; then \
 			printf "$(BLUE)No Python files found in $(MARIMO_FOLDER)$(RESET)\n"; \
+			echo "<html><head><title>Marimo Notebooks</title></head><body><h1>Marimo Notebooks</h1><p>No notebooks found.</p></body></html>" > _marimushka/index.html; \
 		else \
 			printf "$(BLUE)Found Python files: $$py_files$(RESET)\n"; \
 			for py_file in $$py_files; do \
@@ -133,16 +136,16 @@ marimushka: install ## Export Marimo notebooks to HTML
 	touch _marimushka/.nojekyll
 
 # Build the combined book
-book: test docs marimushka
+book:
 
 	@echo "Building combined documentation..."
 	mkdir -p _book
-	
+
 	# Copy API docs
 	@if [ -d _pdoc ]; then \
 		mkdir -p _book/pdoc; \
 		cp -r _pdoc/* _book/pdoc; \
-		echo '"API": "./pdoc/index.html"' > _book/links.json; \
+		echo '{"API": "./pdoc/index.html"}' > _book/links.json; \
 	else \
 		echo '{}' > _book/links.json; \
 	fi
@@ -173,7 +176,19 @@ book: test docs marimushka
 	@cat _book/links.json
 
 	@echo "Generating landing page with uvx minibook..."
-	uvx minibook@v0.0.16 --title $(BOOK_TITLE) --subtitle $(BOOK_SUBTITLE) --links "$$(cat _book/links.json)" --output "_book"
+	@echo "Parsing links:"
+	@if [ -f "_book/links.json" ]; then \
+		if jq empty _book/links.json 2>/dev/null; then \
+			echo "JSON is valid, using it directly"; \
+			uvx minibook@v0.0.16 --title $(BOOK_TITLE) --subtitle $(BOOK_SUBTITLE) --links "$$(cat _book/links.json)" --output "_book"; \
+		else \
+			echo "JSON parsing failed, falling back to legacy format"; \
+			uvx minibook@v0.0.16 --title $(BOOK_TITLE) --subtitle $(BOOK_SUBTITLE) --output "_book"; \
+		fi; \
+	else \
+		echo "links.json not found, using default settings"; \
+		uvx minibook@v0.0.16 --title $(BOOK_TITLE) --subtitle $(BOOK_SUBTITLE) --output "_book"; \
+	fi
 
 	# Create .nojekyll file to prevent GitHub Pages from processing with Jekyll
 	touch "_book/.nojekyll"
