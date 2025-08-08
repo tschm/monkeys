@@ -37,6 +37,9 @@ jobs:
       id-token: write         # Permission to verify deployment origin
 
     steps:
+      # Check out the repository code
+      - uses: actions/checkout@v4
+
       - name: "Make the book"
         run: |
           make book
