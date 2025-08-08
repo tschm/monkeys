@@ -67,15 +67,14 @@ jobs:
 
       - name: Build
         if: hashFiles('pyproject.toml') != ''
-        run: |          
+        run: |
           version=${{ github.event.inputs.tag }}
           version=${version#v}
           echo "Setting version to $version"
           sed -i.bak "s/^version = .*/version = \"$version\"/" pyproject.toml
           rm pyproject.toml.bak
-          
-          make build
 
+          make build
 
       - name: Upload dist artifact
         # not tested at runtime!

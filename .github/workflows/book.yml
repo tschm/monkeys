@@ -18,11 +18,7 @@
 name: "BOOK"
 
 on:
-  push:
-    #branches:
-    #  # please use either main or master as your default branch
-    #  - main
-    #  - master
+  push
 
 jobs:
   book:
@@ -39,6 +35,18 @@ jobs:
     steps:
       # Check out the repository code
       - uses: actions/checkout@v4
+
+      - name: "Make the docs"
+        run: |
+          make docs
+
+      - name: "Make the tests"
+        run: |
+          make tests
+
+      - name: "Make the notebooks"
+        run: |
+          make marimushka
 
       - name: "Make the book"
         run: |
