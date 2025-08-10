@@ -52,7 +52,7 @@ jobs:
 
       - name: "Make the tests"
         run: |
-          task test:test
+          task docs:test
 
       - name: "Make the notebooks"
         run: |
