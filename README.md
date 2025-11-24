@@ -85,6 +85,9 @@ specifies its dependencies:
 # ///
 ```
 
+```result
+```
+
 When you run a notebook with the `--sandbox` flag (which the Makefile includes),
 Marimo automatically:
 
