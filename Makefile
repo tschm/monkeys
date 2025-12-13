@@ -1,5 +1,5 @@
-## Makefile for tschm/.config-templates
-# (https://github.com/tschm/.config-templates)
+## Makefile for jebel-quant/rhiza
+# (https://github.com/jebel-quant/rhiza)
 #
 # Purpose: Developer tasks using uv/uvx (install, test, docs, marimushka, book).
 # Lines with `##` after a target are parsed into help text,
@@ -98,10 +98,13 @@ clean: ## clean
 
 ##@ Development and Testing
 test: install ## run all tests
-	@mkdir -p _tests/html-coverage _tests/html-report
-	@${UV_BIN} pip install pytest pytest-cov pytest-html
-	@${UV_BIN} run pytest ${TESTS_FOLDER} --cov=${SOURCE_FOLDER} --cov-report=term --cov-report=html:_tests/html-coverage --html=_tests/html-report/report.html
-
+	@if [ -d ${SOURCE_FOLDER} ] && [ -d ${TESTS_FOLDER} ]; then \
+	  mkdir -p _tests/html-coverage _tests/html-report; \
+	  ${UV_BIN} pip install pytest pytest-cov pytest-html; \
+	  ${UV_BIN} run pytest ${TESTS_FOLDER} --cov=${SOURCE_FOLDER} --cov-report=term --cov-report=html:_tests/html-coverage --html=_tests/html-report/report.html; \
+	else \
+	  printf "${YELLOW}[WARN] Source folder ${SOURCE_FOLDER} or tests folder ${TESTS_FOLDER} not found, skipping tests${RESET}\n"; \
+	fi
 
 marimo: install ## fire up Marimo server
 	@if [ ! -d "${MARIMO_FOLDER}" ]; then \
@@ -111,7 +114,7 @@ marimo: install ## fire up Marimo server
 	  ${UV_BIN} run marimo edit "${MARIMO_FOLDER}"; \
 	fi
 
-marimushka: install ## export Marimo notebooks to HTML
+marimushka: install-uv ## export Marimo notebooks to HTML
 	@printf "${BLUE}[INFO] Exporting notebooks from ${MARIMO_FOLDER}...${RESET}\n"
 	@if [ ! -d "${MARIMO_FOLDER}" ]; then \
 	  printf "${YELLOW}[WARN] Directory '${MARIMO_FOLDER}' does not exist. Skipping marimushka.${RESET}\n"; \
