@@ -98,28 +98,30 @@ def prices(tickers=None):
     return close_prices
 
 
-def save(close_prices):
+def save(close_prices, output_path=None):
     """Save the downloaded price data to a CSV file.
 
     Args:
         close_prices: pandas.DataFrame containing the close prices to save.
+        output_path: Optional path for output file. Defaults to book/marimo/public/downloads.csv.
 
     Returns:
-        None
+        pathlib.Path: Path to the saved file.
     """
-    # Save the data to a CSV file
-    output_file = str(pathlib.Path(__file__).resolve().parent / "notebooks" / "public" / "downloads.csv")
+    if output_path is None:
+        # Default to the marimo public folder relative to repo root
+        repo_root = pathlib.Path(__file__).resolve().parent.parent
+        output_path = repo_root / "book" / "marimo" / "public" / "downloads.csv"
 
-    #    mo.notebook_location() / "public" / "stock-prices-new.csv")
-    close_prices.to_csv(output_file)
+    output_path = pathlib.Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    logger.info(f"## Data saved to {output_file}")
-    return
+    close_prices.to_csv(output_path)
 
+    logger.info(f"Data saved to {output_path}")
+    return output_path
 
-# todo: there is no need to make this a marimo app.
-# Just use uv run download_prices.py
 
 if __name__ == "__main__":
-    prices = prices()
-    save(prices)
+    price_data = prices()
+    save(price_data)

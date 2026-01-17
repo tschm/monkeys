@@ -51,14 +51,16 @@ exclude = ["**/[{][{]*/", "**/*[}][}]*/"]
 # YTT: flake8-2020 - Python 2020+ compatibility
 
 # Selected rule sets to enforce:
+# B: flake8-bugbear - Find likely bugs and design problems
 # D: pydocstyle - Check docstring style
 # E: pycodestyle errors - PEP 8 style guide
 # F: pyflakes - Detect logical errors
 # I: isort - Sort imports
 # N: pep8-naming - Check PEP 8 naming conventions
+# S: flake8-bandit - Find security issues
 # W: pycodestyle warnings - PEP 8 style guide warnings
 # UP: pyupgrade - Upgrade syntax for newer Python
-select = ["D", "E", "F", "I", "N", "W", "UP"]
+select = ["B", "D", "E", "F", "I", "N", "S", "W", "UP"]
 
 # Ensure docstrings are required for magic methods (e.g., __init__) and
 # private/underscored modules by explicitly selecting the relevant pydocstyle
@@ -83,6 +85,7 @@ line-ending = "auto"
 
 # File-specific rule exceptions
 [lint.per-file-ignores]
-"tests/**/*.py" = ["S101"]        # Allow assert statements in tests
-"book/marimo/*.py" = ["N803", "S101"] # Allow non-lowercase variable names (N803)
-                                      # and assert statements in marimo files
+"tests/**/*.py" = ["S101", "S603", "S607"]  # Allow assert, subprocess calls in tests
+"book/marimo/**/*.py" = ["B018", "N803", "S101"]  # Allow useless expressions (B018) for Marimo cell display,
+                                                  # non-lowercase variable names (N803), and assert statements
+"scripts/*.py" = ["S110", "BLE001"]         # Allow broad exception handling in scripts
