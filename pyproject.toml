@@ -26,3 +26,11 @@ dev = [
 [project.urls]
 repository = "https://github.com/tschm/monkeys"
 homepage = "https://tschm.github.io/monkeys/book"
+
+[tool.deptry.package_module_name_map]
+marimo = "marimo"
+pandas = "pandas"
+numpy = "numpy"
+plotly = "plotly"
+polars = "polars"
+cvxsimulator = "cvxsimulator"
