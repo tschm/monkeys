@@ -154,7 +154,7 @@ monkeys/
 - **OIDC publishing** (no stored credentials)
 - **SECURITY.md** with vulnerability disclosure policy
 
-### Ruff Security Configuration
+### Ruff Security Configuration (ruff.toml)
 ```toml
 select = ["B", "D", "E", "F", "I", "N", "S", "W", "UP"]
 ```
