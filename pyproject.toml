@@ -1,6 +1,6 @@
 [project]
 name = "monkeys"
-version = "0.0.0"
+version = "0.2.0"
 description = "Random portfolio allocation simulation - comparing monkeys to fund managers."
 readme = "README.md"
 license = { file = "LICENSE" }
