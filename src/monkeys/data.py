@@ -95,7 +95,9 @@ def calculate_returns(prices: pd.DataFrame, method: str = "simple") -> pd.DataFr
     if method == "log":
         import numpy as np
 
-        return np.log(prices / prices.shift(1)).dropna()
+        # Use diff of log prices: log(P_t/P_{t-1}) = log(P_t) - log(P_{t-1})
+        log_prices: pd.DataFrame = prices.apply(np.log)
+        return log_prices.diff().dropna()
 
     msg = f"Unknown return method: {method}. Use 'simple' or 'log'."
     raise ValueError(msg)
