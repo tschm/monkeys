@@ -5,7 +5,7 @@ generation, portfolio calculations, and data validation.
 """
 
 import numpy as np
-import pandas as pd
+import polars as pl
 import pytest
 
 from monkeys import (
@@ -56,17 +56,18 @@ class TestMonkeyPortfolio:
 
         assert portfolio.is_fully_invested(tolerance=1e-9)
 
-    def test_to_series(self):
-        """Test conversion to pandas Series."""
+    def test_to_dataframe(self):
+        """Test conversion to polars DataFrame."""
         weights = {"AAPL": 0.5, "GOOG": 0.3, "MSFT": 0.2}
         portfolio = MonkeyPortfolio(weights=weights)
 
-        series = portfolio.to_series()
+        df = portfolio.to_dataframe()
 
-        assert isinstance(series, pd.Series)
-        assert series.name == "weight"
-        assert len(series) == 3
-        assert series["AAPL"] == 0.5
+        assert isinstance(df, pl.DataFrame)
+        assert "asset" in df.columns
+        assert "weight" in df.columns
+        assert len(df) == 3
+        assert df.filter(pl.col("asset") == "AAPL")["weight"].item() == 0.5
 
 
 class TestSimulateRandomWeights:

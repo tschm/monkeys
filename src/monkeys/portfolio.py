@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    import pandas as pd
+    import polars as pl
     from numpy.random import Generator
 
 
@@ -47,15 +47,15 @@ class MonkeyPortfolio:
         """
         return abs(sum(self.weights.values()) - 1.0) < tolerance
 
-    def to_series(self) -> pd.Series:
-        """Convert weights to a pandas Series.
+    def to_dataframe(self) -> pl.DataFrame:
+        """Convert weights to a polars DataFrame.
 
         Returns:
-            Series with asset names as index and weights as values.
+            DataFrame with 'asset' and 'weight' columns.
         """
-        import pandas as pd
+        import polars as pl
 
-        return pd.Series(self.weights, name="weight")
+        return pl.DataFrame({"asset": list(self.weights.keys()), "weight": list(self.weights.values())})
 
 
 def simulate_random_weights(
