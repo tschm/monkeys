@@ -7,13 +7,10 @@ using random weights, inspired by the "monkeys vs fund managers" concept.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
 
 import numpy as np
-
-if TYPE_CHECKING:
-    import polars as pl
-    from numpy.random import Generator
+import polars as pl
+from numpy.random import Generator
 
 
 @dataclass

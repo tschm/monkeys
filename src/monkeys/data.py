@@ -8,10 +8,8 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    import polars as pl
+import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -54,8 +52,6 @@ def load_prices_from_csv(filepath: str | Path) -> pl.DataFrame:
         FileNotFoundError: If the CSV file does not exist.
         ValueError: If the CSV file is empty or malformed.
     """
-    import polars as pl
-
     filepath = Path(filepath)
     if not filepath.exists():
         msg = f"Price file not found: {filepath}"
@@ -90,8 +86,6 @@ def calculate_returns(prices: pl.DataFrame, method: str = "simple") -> pl.DataFr
     Raises:
         ValueError: If method is not recognized.
     """
-    import polars as pl
-
     # Get ticker columns (all columns except Date)
     ticker_cols = [col for col in prices.columns if col != "Date"]
 
