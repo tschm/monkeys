@@ -111,7 +111,7 @@ def save(close_prices, output_path=None):
     if output_path is None:
         # Default to the marimo public folder relative to repo root
         repo_root = pathlib.Path(__file__).resolve().parent.parent
-        output_path = repo_root / "book" / "marimo" / "public" / "downloads.csv"
+        output_path = repo_root / "book" / "marimo" / "notebooks" / "data" / "downloads.csv"
 
     output_path = pathlib.Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
