@@ -13,7 +13,7 @@ import polars as pl
 from numpy.random import Generator
 
 
-@dataclass
+@dataclass(frozen=True)
 class MonkeyPortfolio:
     """A portfolio managed by a "monkey" using random weight allocation.
 

@@ -32,7 +32,6 @@ with app.setup:
 
     pio.renderers.default = "plotly_mimetype"
 
-    # path = marimo.notebook_location()
     path = Path(__file__).parent
 
     prices_file = path / "data" / "stock-prices-new.csv"
