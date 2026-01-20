@@ -35,7 +35,7 @@ with app.setup:
     # path = marimo.notebook_location()
     path = Path(__file__).parent
 
-    prices_file = str(path / "public" / "stock-prices-new.csv")
+    prices_file = path / "data" / "stock-prices-new.csv"
 
     prices = pl.read_csv(prices_file, try_parse_dates=True).to_pandas().set_index("Date")
     for col in prices.columns:
