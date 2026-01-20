@@ -40,28 +40,28 @@ class TestMonkeyPortfolio:
         weights = {"AAPL": 0.5, "GOOG": 0.3, "MSFT": 0.2}
         portfolio = MonkeyPortfolio(weights=weights)
 
-        assert portfolio.is_fully_invested()
+        assert portfolio.is_fully_invested
 
     def test_is_fully_invested_false(self):
         """Test fully invested check returns False for invalid portfolio."""
         weights = {"AAPL": 0.5, "GOOG": 0.3}  # Sum is 0.8
         portfolio = MonkeyPortfolio(weights=weights)
 
-        assert not portfolio.is_fully_invested()
+        assert not portfolio.is_fully_invested
 
     def test_is_fully_invested_with_tolerance(self):
         """Test fully invested check respects tolerance parameter."""
         weights = {"AAPL": 0.5, "GOOG": 0.5 + 1e-10}
         portfolio = MonkeyPortfolio(weights=weights)
 
-        assert portfolio.is_fully_invested(tolerance=1e-9)
+        assert portfolio.is_fully_invested
 
     def test_to_dataframe(self):
         """Test conversion to polars DataFrame."""
         weights = {"AAPL": 0.5, "GOOG": 0.3, "MSFT": 0.2}
         portfolio = MonkeyPortfolio(weights=weights)
 
-        df = portfolio.to_dataframe()
+        df = portfolio.to_dataframe
 
         assert isinstance(df, pl.DataFrame)
         assert "asset" in df.columns
@@ -80,7 +80,7 @@ class TestSimulateRandomWeights:
 
         assert isinstance(portfolio, MonkeyPortfolio)
         assert portfolio.n_assets == 3
-        assert portfolio.is_fully_invested()
+        assert portfolio.is_fully_invested
 
     def test_reproducibility_with_seed(self):
         """Test that same seed produces same weights."""
@@ -134,7 +134,7 @@ class TestSimulateRandomWeights:
 
         portfolio = simulate_random_weights(assets, rng=rng)
 
-        assert portfolio.is_fully_invested()
+        assert portfolio.is_fully_invested
 
     def test_large_portfolio(self):
         """Test portfolio generation with many assets."""
@@ -142,7 +142,7 @@ class TestSimulateRandomWeights:
         portfolio = simulate_random_weights(assets, seed=42)
 
         assert portfolio.n_assets == 100
-        assert portfolio.is_fully_invested()
+        assert portfolio.is_fully_invested
 
 
 class TestGenerateWeightHistory:
@@ -162,7 +162,7 @@ class TestGenerateWeightHistory:
         history = generate_weight_history(assets, n_periods=10, seed=42)
 
         for portfolio in history:
-            assert portfolio.is_fully_invested()
+            assert portfolio.is_fully_invested
 
     def test_reproducibility(self):
         """Test that same seed produces same history."""

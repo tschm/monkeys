@@ -27,31 +27,29 @@ class MonkeyPortfolio:
 
     weights: dict[str, float]
     seed: int | None = None
+    tolerance: float = 1e-9
 
     @property
     def n_assets(self) -> int:
         """Return the number of assets in the portfolio."""
         return len(self.weights)
 
-    def is_fully_invested(self, tolerance: float = 1e-9) -> bool:
+    @property
+    def is_fully_invested(self) -> bool:
         """Check if portfolio weights sum to 1.
-
-        Args:
-            tolerance: Acceptable deviation from 1.0.
 
         Returns:
             True if weights sum to 1 within tolerance.
         """
-        return abs(sum(self.weights.values()) - 1.0) < tolerance
+        return abs(sum(self.weights.values()) - 1.0) < self.tolerance
 
+    @property
     def to_dataframe(self) -> pl.DataFrame:
         """Convert weights to a polars DataFrame.
 
         Returns:
             DataFrame with 'asset' and 'weight' columns.
         """
-        import polars as pl
-
         return pl.DataFrame({"asset": list(self.weights.keys()), "weight": list(self.weights.values())})
 
 
@@ -78,7 +76,7 @@ def simulate_random_weights(
 
     Examples:
         >>> weights = simulate_random_weights(["AAPL", "GOOG", "MSFT"], seed=42)
-        >>> bool(weights.is_fully_invested())
+        >>> bool(weights.is_fully_invested)
         True
         >>> len(weights.weights)
         3
