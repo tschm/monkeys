@@ -19,7 +19,7 @@ Or in the rhiza project: make marimo
 #     "marimo==0.18.4",
 #     "numpy>=1.24.0",
 #     "plotly>=5.18.0",
-#     "polars>=1.3",
+#     "pandas>=2.0.0",
 # ]
 # ///
 
@@ -31,8 +31,8 @@ app = marimo.App(width="medium")
 with app.setup:
     import marimo as mo
     import numpy as np
+    import pandas as pd
     import plotly.graph_objects as go
-    import polars as pl
 
 
 @app.cell
@@ -224,16 +224,16 @@ def cell_17():
         r"""
         ## 📋 Working with DataFrames
 
-        Marimo provides excellent support for working with Polars DataFrames.
+        Marimo provides excellent support for working with Pandas DataFrames.
         """
     )
 
 
 @app.cell
 def cell_18():
-    """Create a sample Polars DataFrame for use in subsequent cells."""
+    """Create a sample Pandas DataFrame for use in subsequent cells."""
     # Create sample data
-    data = pl.DataFrame(
+    data = pd.DataFrame(
         {
             "Product": ["Widget A", "Widget B", "Widget C", "Widget D", "Widget E"],
             "Sales": [250, 180, 420, 350, 290],
