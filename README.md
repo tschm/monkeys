@@ -1,6 +1,7 @@
 # [Monkeys](https://tschm.github.io/monkeys/book)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Coverage](https://img.shields.io/endpoint?url=https://tschm.github.io/monkeys/book/tests/coverage-badge.json)](https://tschm.github.io/monkeys/book/tests/html-coverage)
 [![CodeFactor](https://www.codefactor.io/repository/github/tschm/monkeys/badge)](https://www.codefactor.io/repository/github/tschm/monkeys)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://github.com/renovatebot/renovate)
 [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/release/python-3130/)
