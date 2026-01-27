@@ -53,6 +53,7 @@ cvxsimulator = "cvxsimulator"
 marimo = "marimo"
 numpy = "numpy"
 pandas = "pandas"
+pandas-stubs = []
 plotly = "plotly"
 polars = "polars"
 pytest = "pytest"
