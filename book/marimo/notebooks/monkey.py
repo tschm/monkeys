@@ -42,16 +42,6 @@ with app.setup:
     returns = monkeys.calculate_returns(prices, method="simple")
     assets = [col for col in prices.columns if col != "Date"]
 
-    def generate_random_weights(assets: list[str], rng: np.random.Generator) -> dict[str, float]:
-        """Generate random portfolio weights that sum to 1."""
-        raw = rng.random(len(assets))
-        normalized = raw / raw.sum()
-        return dict(zip(assets, normalized, strict=False))
-
-    def calculate_portfolio_return(weights: dict[str, float], asset_returns: dict[str, float]) -> float:
-        """Calculate portfolio return given weights and asset returns."""
-        return sum(weights[asset] * asset_returns[asset] for asset in weights)
-
 
 @app.function
 def run_simulation(seed: int = 0):
@@ -67,20 +57,21 @@ def run_simulation(seed: int = 0):
     """
     print(f"Version of monkeys: {monkeys.__version__}")
 
-    rng = np.random.default_rng(seed)
     n_periods = len(returns)
-    weight_history = [generate_random_weights(assets, rng) for _ in range(n_periods)]
+    n_assets = len(assets)
 
-    portfolio_returns = []
+    # Convert returns to numpy array for package functions
+    returns_array = returns.select(assets).to_numpy()
+
+    # Use package functions for simulation
+    portfolio_returns = monkeys.simulate_portfolio_returns(returns_array, seed=seed)
+    weights_array = monkeys.generate_weight_history(n_assets, n_periods, seed=seed)
+
+    # Convert weights to list of dicts for display compatibility
+    weight_history = [dict(zip(assets, w, strict=False)) for w in weights_array]
+
     dates = returns.select("Date").to_series().to_list()
-
-    for i, weights in enumerate(weight_history):
-        row = returns.row(i, named=True)
-        asset_returns = {k: v for k, v in row.items() if k != "Date"}
-        period_return = calculate_portfolio_return(weights, asset_returns)
-        portfolio_returns.append(period_return)
-
-    cumulative = np.cumprod(1 + np.array(portfolio_returns))
+    cumulative = np.cumprod(1 + portfolio_returns)
 
     result = pl.DataFrame({"Date": dates, "Return": portfolio_returns, "Cumulative": cumulative})
 
