@@ -99,7 +99,7 @@ def create_portfolio():
 @app.cell
 def _(result):
     fig = px.line(
-        result.to_pandas(),
+        result,
         x="Date",
         y="Cumulative",
         title="Portfolio Cumulative Return",
@@ -134,7 +134,7 @@ def _(weight_history):
     marimo.md(f"""
 ## Final Portfolio Weights
 
-{final_weights.to_dataframe.to_pandas().to_markdown(index=False)}
+{final_weights.to_dataframe}
 """)
 
 

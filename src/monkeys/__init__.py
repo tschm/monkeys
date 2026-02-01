@@ -30,4 +30,7 @@ __all__ = [
     "load_prices_from_csv",
     "simulate_random_weights",
 ]
-__version__ = "0.0.0"
+
+import importlib.metadata
+
+__version__ = importlib.metadata.version("monkeys")
