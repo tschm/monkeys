@@ -42,24 +42,34 @@ with app.setup:
     returns = monkeys.calculate_returns(prices, method="simple")
     assets = [col for col in prices.columns if col != "Date"]
 
+    def generate_random_weights(assets: list[str], rng: np.random.Generator) -> dict[str, float]:
+        """Generate random portfolio weights that sum to 1."""
+        raw = rng.random(len(assets))
+        normalized = raw / raw.sum()
+        return dict(zip(assets, normalized, strict=False))
+
+    def calculate_portfolio_return(weights: dict[str, float], asset_returns: dict[str, float]) -> float:
+        """Calculate portfolio return given weights and asset returns."""
+        return sum(weights[asset] * asset_returns[asset] for asset in weights)
+
 
 @app.function
 def run_simulation(seed: int = 0):
     """Run a portfolio simulation with random weights.
 
-    Creates a portfolio simulation using monkeys.portfolio with random weights
-    at each time step.
+    Creates a portfolio simulation with random weights at each time step.
 
     Args:
         seed: Random seed for reproducibility.
 
     Returns:
-        pl.DataFrame: DataFrame with dates and cumulative portfolio returns.
+        tuple: DataFrame with dates and cumulative portfolio returns, and weight history.
     """
     print(f"Version of monkeys: {monkeys.__version__}")
 
+    rng = np.random.default_rng(seed)
     n_periods = len(returns)
-    weight_history = monkeys.generate_weight_history(assets, n_periods, seed=seed)
+    weight_history = [generate_random_weights(assets, rng) for _ in range(n_periods)]
 
     portfolio_returns = []
     dates = returns.select("Date").to_series().to_list()
@@ -67,7 +77,7 @@ def run_simulation(seed: int = 0):
     for i, weights in enumerate(weight_history):
         row = returns.row(i, named=True)
         asset_returns = {k: v for k, v in row.items() if k != "Date"}
-        period_return = monkeys.calculate_portfolio_return(weights, asset_returns)
+        period_return = calculate_portfolio_return(weights, asset_returns)
         portfolio_returns.append(period_return)
 
     cumulative = np.cumprod(1 + np.array(portfolio_returns))
@@ -132,10 +142,13 @@ def _(result):
 @app.cell
 def _(weight_history):
     final_weights = weight_history[-1]
+    weights_table = "\n".join(f"| {asset} | {weight:.4f} |" for asset, weight in final_weights.items())
     weights_md = marimo.md(f"""
 ## Final Portfolio Weights
 
-{final_weights.to_dataframe}
+| Asset | Weight |
+|-------|--------|
+{weights_table}
 """)
     return (weights_md,)
 
