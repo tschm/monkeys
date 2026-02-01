@@ -11,7 +11,6 @@ import pytest
 
 from monkeys import (
     calculate_returns,
-    get_valid_tickers,
     load_prices_from_csv,
 )
 
@@ -130,59 +129,3 @@ class TestCalculateReturns:
         returns = calculate_returns(sample_prices)
 
         assert list(returns.columns) == list(sample_prices.columns)
-
-
-class TestGetValidTickers:
-    """Tests for the get_valid_tickers function."""
-
-    @pytest.fixture
-    def mixed_data_prices(self):
-        """Create price DataFrame with varying data availability."""
-        rng = np.random.default_rng(42)
-        dates = [date(2024, 1, 1) + __import__("datetime").timedelta(days=i) for i in range(300)]
-        full_data = (rng.random(300) * 100 + 100).tolist()
-        partial_data = [None] * 100 + (rng.random(200) * 50 + 50).tolist()
-        sparse_data = [None] * 250 + (rng.random(50) * 25 + 25).tolist()
-        return pl.DataFrame(
-            {
-                "Date": dates,
-                "FULL": full_data,
-                "PARTIAL": partial_data,
-                "SPARSE": sparse_data,
-            }
-        )
-
-    def test_filters_by_min_observations(self, mixed_data_prices):
-        """Test that tickers are filtered by minimum observations."""
-        valid = get_valid_tickers(mixed_data_prices, min_observations=252)
-
-        assert "FULL" in valid
-        assert "PARTIAL" not in valid
-        assert "SPARSE" not in valid
-
-    def test_lower_threshold_includes_more(self, mixed_data_prices):
-        """Test that lower threshold includes more tickers."""
-        valid = get_valid_tickers(mixed_data_prices, min_observations=100)
-
-        assert "FULL" in valid
-        assert "PARTIAL" in valid
-        assert "SPARSE" not in valid
-
-    def test_very_low_threshold_includes_all(self, mixed_data_prices):
-        """Test that very low threshold includes all tickers."""
-        valid = get_valid_tickers(mixed_data_prices, min_observations=10)
-
-        assert len(valid) == 3
-
-    def test_returns_list(self, mixed_data_prices):
-        """Test that function returns a list."""
-        valid = get_valid_tickers(mixed_data_prices, min_observations=100)
-
-        assert isinstance(valid, list)
-
-    def test_empty_dataframe(self):
-        """Test with empty DataFrame."""
-        empty_df = pl.DataFrame()
-        valid = get_valid_tickers(empty_df)
-
-        assert valid == []

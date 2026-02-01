@@ -76,26 +76,3 @@ def calculate_returns(prices: pl.DataFrame, method: str = "simple") -> pl.DataFr
 
     msg = f"Unknown return method: {method}. Use 'simple' or 'log'."
     raise ValueError(msg)
-
-
-def get_valid_tickers(prices: pl.DataFrame, min_observations: int = 252) -> list[str]:
-    """Get tickers with sufficient data for analysis.
-
-    Args:
-        prices: DataFrame with Date column and ticker columns.
-        min_observations: Minimum number of non-null observations required.
-
-    Returns:
-        List of ticker symbols meeting the observation threshold.
-    """
-    import polars as pl
-
-    # Get ticker columns (all columns except Date)
-    ticker_cols = [col for col in prices.columns if col != "Date"]
-
-    valid = []
-    for col in ticker_cols:
-        count = prices.select(pl.col(col).is_not_null().sum()).item()
-        if count >= min_observations:
-            valid.append(col)
-    return valid
