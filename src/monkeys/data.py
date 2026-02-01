@@ -13,30 +13,6 @@ import polars as pl
 
 logger = logging.getLogger(__name__)
 
-# Default universe of tickers for simulation
-DEFAULT_TICKERS: list[str] = [
-    "GOOG",
-    "AAPL",
-    "META",
-    "BABA",
-    "AMZN",
-    "GE",
-    "AMD",
-    "WMT",
-    "BAC",
-    "GM",
-    "T",
-    "UAA",
-    "SHLD",
-    "XOM",
-    "RRC",
-    "BBY",
-    "MA",
-    "PFE",
-    "JPM",
-    "SBUX",
-]
-
 
 def load_prices_from_csv(filepath: str | Path) -> pl.DataFrame:
     """Load price data from a CSV file.
