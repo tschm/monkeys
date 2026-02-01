@@ -53,7 +53,7 @@ class TestMonkeyPortfolio:
         weights = np.array([0.3, 0.3, 0.3])  # Sum = 0.9
         tickers = ["AAPL", "GOOG", "MSFT"]
 
-        with pytest.raises(ValueError, match="must sum to 1.0"):
+        with pytest.raises(ValueError, match=r"must sum to 1\.0"):
             MonkeyPortfolio(weights=weights, tickers=tickers)
 
     def test_negative_weights_raises_error(self):
@@ -145,7 +145,7 @@ class TestSimulateRandomWeights:
         """Test that probabilities not summing to 1.0 raises ValueError."""
         probs = np.array([0.3, 0.3, 0.3])
 
-        with pytest.raises(ValueError, match="must sum to 1.0"):
+        with pytest.raises(ValueError, match=r"must sum to 1\.0"):
             simulate_random_weights(3, probabilities=probs)
 
     @pytest.mark.parametrize("n_assets", [2, 5, 10, 50, 100])
@@ -216,8 +216,15 @@ class TestGenerateWeightHistory:
         assert history.shape == (10, 3)
         assert np.allclose(history.sum(axis=1), 1.0)
 
+    def test_probabilities_not_summing_to_one_raises_error(self):
+        """Test that probabilities not summing to 1.0 raises ValueError."""
+        probs = np.array([0.3, 0.3, 0.3])
+
+        with pytest.raises(ValueError, match=r"must sum to 1\.0"):
+            generate_weight_history(3, 10, probabilities=probs)
+
     @pytest.mark.parametrize(
-        "n_assets,n_periods",
+        ("n_assets", "n_periods"),
         [(2, 5), (5, 10), (10, 100), (20, 252)],
     )
     def test_various_dimensions(self, n_assets, n_periods):
@@ -403,7 +410,7 @@ class TestSimulatePortfolioReturns:
         assert len(portfolio_returns) == 2
 
     @pytest.mark.parametrize(
-        "n_periods,n_assets",
+        ("n_periods", "n_assets"),
         [(10, 3), (100, 5), (252, 10)],
     )
     def test_various_dimensions(self, n_periods, n_assets):
