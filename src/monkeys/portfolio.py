@@ -113,7 +113,7 @@ def simulate_random_weights(
     raw_weights = probabilities * uniform_samples
 
     # Normalize to ensure weights sum to 1.0
-    weights = raw_weights / raw_weights.sum()
+    weights: NDArray[np.float64] = raw_weights / raw_weights.sum()
 
     return weights
 
@@ -166,7 +166,7 @@ def generate_weight_history(
 
     # Normalize each row
     row_sums = raw_weights.sum(axis=1, keepdims=True)
-    weights = raw_weights / row_sums
+    weights: NDArray[np.float64] = raw_weights / row_sums
 
     return weights
 
