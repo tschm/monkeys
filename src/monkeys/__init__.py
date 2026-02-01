@@ -12,21 +12,15 @@ from monkeys.data import (
     load_prices_from_csv,
 )
 from monkeys.portfolio import (
-    MonkeyPortfolio,
-    calculate_portfolio_return,
     generate_weight_history,
     simulate_portfolio_returns,
-    simulate_random_weights,
 )
 
 __all__ = [
-    "MonkeyPortfolio",
-    "calculate_portfolio_return",
     "calculate_returns",
     "generate_weight_history",
     "load_prices_from_csv",
     "simulate_portfolio_returns",
-    "simulate_random_weights",
 ]
 
 import importlib.metadata
