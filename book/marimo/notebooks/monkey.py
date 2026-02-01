@@ -1,17 +1,19 @@
 # /// script
 # dependencies = [
-#     "marimo==0.14.16",
-#     "numpy==2.3.1",
-#     "pandas==2.3.0",
-#     "plotly==6.2.0",
-#     "polars==1.32.2",
-#     "cvxsimulator==1.4.3",
+#   "marimo==0.14.16",
+#   "numpy==2.3.1",
+#   "plotly==6.2.0",
+#   "polars==1.32.2",
+#   "monkeys",
 # ]
+# requires-python = ">=3.13"
+# [tool.uv.sources]
+#   monkeys = { path = "../../..", editable=true }
 # ///
 
 """Marimo notebook for simulating a random equity portfolio.
 
-This module demonstrates the use of cvxsimulator to create and analyze
+This module demonstrates the use of monkeys.portfolio to create and analyze
 a portfolio with random weights for a set of equities.
 """
 
@@ -23,51 +25,58 @@ app = marimo.App()
 with app.setup:
     from pathlib import Path
 
-    import cvxsimulator as sim
     import marimo
     import numpy as np
-    import pandas as pd
+    import plotly.express as px
     import plotly.io as pio
     import polars as pl
+
+    import monkeys
 
     pio.renderers.default = "plotly_mimetype"
 
     path = Path(__file__).parent
-
     prices_file = path / "data" / "stock-prices-new.csv"
 
-    prices = pl.read_csv(prices_file, try_parse_dates=True).to_pandas().set_index("Date")
-    for col in prices.columns:
-        prices[col] = pd.to_numeric(prices[col], errors="coerce").astype("float64")
+    prices = monkeys.load_prices_from_csv(prices_file)
+    returns = monkeys.calculate_returns(prices, method="simple")
+    assets = [col for col in prices.columns if col != "Date"]
 
 
 @app.function
-def run_simulation():
+def run_simulation(seed: int = 0):
     """Run a portfolio simulation with random weights.
 
-    Creates a portfolio simulation using cvxsimulator with an initial AUM of 1 million.
-    At each time step, assigns random weights to assets and maintains the same AUM.
-    Displays portfolio snapshot and metrics after simulation.
+    Creates a portfolio simulation using monkeys.portfolio with random weights
+    at each time step.
+
+    Args:
+        seed: Random seed for reproducibility.
 
     Returns:
-        cvxsimulator.Portfolio: The built portfolio object with simulation results.
+        pl.DataFrame: DataFrame with dates and cumulative portfolio returns.
     """
-    print(f"Version of cvxsimulator: {sim.__version__}")
+    print(f"Version of monkeys: {monkeys.__version__}")
 
-    b = sim.Builder(prices=prices, initial_aum=1e6)
-    rng = np.random.default_rng(0)
+    n_periods = len(returns)
+    weight_history = monkeys.generate_weight_history(assets, n_periods, seed=seed)
 
-    for _t, state in b:
-        n = len(state.assets)
-        w = rng.uniform(0, 1, n)
-        b.weights = w / np.sum(w)
-        b.aum = state.aum
+    portfolio_returns = []
+    dates = returns.select("Date").to_series().to_list()
 
-    portfolio = b.build()
+    for i, weights in enumerate(weight_history):
+        row = returns.row(i, named=True)
+        asset_returns = {k: v for k, v in row.items() if k != "Date"}
+        period_return = monkeys.calculate_portfolio_return(weights, asset_returns)
+        portfolio_returns.append(period_return)
+
+    cumulative = np.cumprod(1 + np.array(portfolio_returns))
+
+    result = pl.DataFrame({"Date": dates, "Return": portfolio_returns, "Cumulative": cumulative})
 
     print("Simulation complete")
 
-    return portfolio
+    return result, weight_history
 
 
 @app.cell
@@ -81,22 +90,52 @@ def create_portfolio():
     """Create a portfolio by running the simulation.
 
     Returns:
-        tuple: A tuple containing the portfolio object.
+        tuple: A tuple containing the simulation results and weight history.
     """
-    portfolio = run_simulation()
-    return (portfolio,)
+    result, weight_history = run_simulation()
+    return result, weight_history
 
 
 @app.cell
-def _(portfolio):
-    portfolio.snapshot()
-    return
+def _(result):
+    fig = px.line(
+        result.to_pandas(),
+        x="Date",
+        y="Cumulative",
+        title="Portfolio Cumulative Return",
+        labels={"Cumulative": "Growth of $1"},
+    )
+    fig
 
 
 @app.cell
-def _(portfolio):
-    portfolio.reports.metrics()
-    return
+def _(result):
+    total_return = (result["Cumulative"][-1] - 1) * 100
+    annualized_return = ((result["Cumulative"][-1]) ** (252 / len(result)) - 1) * 100
+    volatility = result["Return"].std() * np.sqrt(252) * 100
+    sharpe = annualized_return / volatility if volatility > 0 else 0
+
+    marimo.md(f"""
+## Portfolio Metrics
+
+| Metric | Value |
+|--------|-------|
+| Total Return | {total_return:.2f}% |
+| Annualized Return | {annualized_return:.2f}% |
+| Annualized Volatility | {volatility:.2f}% |
+| Sharpe Ratio | {sharpe:.2f} |
+| Number of Periods | {len(result)} |
+""")
+
+
+@app.cell
+def _(weight_history):
+    final_weights = weight_history[-1]
+    marimo.md(f"""
+## Final Portfolio Weights
+
+{final_weights.to_dataframe.to_pandas().to_markdown(index=False)}
+""")
 
 
 if __name__ == "__main__":

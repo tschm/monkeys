@@ -20,7 +20,6 @@ dev = [
 	"marimo>=0.18",
 	"numpy>=2.4",
 	"plotly>=6.5",
-	"pre-commit>=4.5.1",
 ]
 
 [project.urls]
@@ -48,4 +47,4 @@ ignore_missing_imports = true
 marimo = "marimo"
 numpy = "numpy"
 plotly = "plotly"
-polars = "polars"   
+polars = "polars"
