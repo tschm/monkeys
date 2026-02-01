@@ -105,7 +105,7 @@ def _(result):
         title="Portfolio Cumulative Return",
         labels={"Cumulative": "Growth of $1"},
     )
-    fig
+    return (fig,)
 
 
 @app.cell
@@ -115,7 +115,7 @@ def _(result):
     volatility = result["Return"].std() * np.sqrt(252) * 100
     sharpe = annualized_return / volatility if volatility > 0 else 0
 
-    marimo.md(f"""
+    metrics_md = marimo.md(f"""
 ## Portfolio Metrics
 
 | Metric | Value |
@@ -126,16 +126,18 @@ def _(result):
 | Sharpe Ratio | {sharpe:.2f} |
 | Number of Periods | {len(result)} |
 """)
+    return (metrics_md,)
 
 
 @app.cell
 def _(weight_history):
     final_weights = weight_history[-1]
-    marimo.md(f"""
+    weights_md = marimo.md(f"""
 ## Final Portfolio Weights
 
 {final_weights.to_dataframe}
 """)
+    return (weights_md,)
 
 
 if __name__ == "__main__":
