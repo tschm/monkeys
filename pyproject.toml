@@ -18,13 +18,9 @@ dependencies = [
 [dependency-groups]
 dev = [
 	"marimo>=0.18",
-	"pandas>=2.3",
 	"numpy>=2.4",
 	"plotly>=6.5",
-	"cvxsimulator>=1.4",
-	"pytest>=8.0",
-	"pytest-cov>=6.0",
-	"pandas-stubs>=2.3.3.260113",
+	"pre-commit>=4.5.1",
 ]
 
 [project.urls]
@@ -49,12 +45,7 @@ module = "polars.*"
 ignore_missing_imports = true
 
 [tool.deptry.package_module_name_map]
-cvxsimulator = "cvxsimulator"
 marimo = "marimo"
 numpy = "numpy"
-pandas = "pandas"
-pandas-stubs = []
 plotly = "plotly"
-polars = "polars"
-pytest = "pytest"
-pytest-cov = "pytest_cov"
+polars = "polars"   
