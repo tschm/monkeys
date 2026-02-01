@@ -1,77 +1,78 @@
 # Repository Analysis: Monkeys
 
-**Analysis Date:** 2026-01-17 (Updated)
+**Analysis Date:** 2026-02-01
 **Repository:** tschm/monkeys
+**Version:** 1.0.1
 **Analyzed by:** Claude Opus 4.5
 
 ---
 
 ## Executive Summary
 
-| Category | Score (1-10) | Notes |
-|----------|--------------|-------|
-| **Code Quality** | 10/10 | Well-structured with security linting, proper src/ layout |
-| **Testing** | 10/10 | 120 tests, 100% coverage on domain code, comprehensive suite |
-| **Documentation** | 10/10 | CHANGELOG, SECURITY.md, interactive notebooks, full docs |
-| **CI/CD** | 10/10 | Comprehensive automation pipeline with security scanning |
-| **Architecture** | 10/10 | Clean src/ layout with proper package structure |
-| **Security** | 10/10 | Bandit + Bugbear rules, SECURITY.md, CodeQL scanning |
-| **Maintainability** | 10/10 | Automated dependencies, template sync, changelog |
-| **Overall** | **10/10** | Production-ready project with excellent practices |
+| Category | Score | Notes |
+|----------|-------|-------|
+| **Code Quality** | 9/10 | Clean structure, Google-style docstrings, proper src/ layout |
+| **Testing** | 8/10 | 11 tests, 100% coverage on domain code, well-organized |
+| **Documentation** | 9/10 | Complete docs with CHANGELOG, SECURITY.md, interactive notebooks |
+| **CI/CD** | 10/10 | 12 workflows covering testing, security, deployment |
+| **Architecture** | 9/10 | Clean src/ layout, minimal dependencies, proper packaging |
+| **Security** | 9/10 | Bandit in pre-commit, CodeQL scanning, SECURITY.md |
+| **Maintainability** | 9/10 | Automated updates, template sync, lock files |
+| **Overall** | **9/10** | Well-maintained project following modern Python practices |
 
 ---
 
-## 1. Code Quality (10/10)
+## 1. Code Quality (9/10)
 
 ### Strengths
-- **Security-focused linting** via Ruff with B (Bugbear) and S (Bandit) rules enabled
-- **Google-style docstrings** consistently applied across all modules
-- **120-character line length** - practical balance between readability and screen space
-- **Pre-commit hooks** ensure code quality gates before commits
-- **Type hints** with `TYPE_CHECKING` imports for clean runtime behavior
+- **Google-style docstrings** consistently applied
+- **Type hints** with `from __future__ import annotations`
+- **120-character line length** - practical balance
+- **Pre-commit hooks** (8 hooks) ensure quality gates
 - **Proper src/ layout** with installable package structure
 
 ### Code Structure
 ```
 src/monkeys/
-├── __init__.py      # Package exports with __all__
-├── portfolio.py     # Portfolio simulation with dataclasses
-└── data.py          # Data loading and processing utilities
+├── __init__.py      # Package exports with __all__, version from metadata
+└── data.py          # Data loading and return calculations (26 statements)
 ```
 
-### Key Code Features
-- `MonkeyPortfolio` dataclass with proper type hints
-- Comprehensive docstrings with Examples sections
-- Clean error handling with descriptive messages
-- Reproducible random generation with seed support
+### Public API
+- `load_prices_from_csv(filepath)` - Load price data from CSV
+- `calculate_returns(prices, method)` - Calculate simple or log returns
+
+### Code Metrics
+- 30 statements total
+- 2 public functions
+- Clear error messages with descriptive exceptions
 
 ---
 
-## 2. Testing (10/10)
+## 2. Testing (8/10)
 
 ### Test Coverage
-- **120 tests** passing across 16 test files
-- **100% coverage** on domain code (`src/monkeys/`)
-- **46 domain tests** for portfolio and data modules
-- **74 framework tests** for Rhiza infrastructure
+- **11 tests** in `tests/test_monkeys/test_data.py`
+- **100% coverage** on domain code (30/30 statements)
+- Tests organized into logical classes
 
 ### Test Structure
 ```
-tests/
-├── test_portfolio.py    # 26 tests - MonkeyPortfolio, weights, returns
-├── test_data.py         # 20 tests - CSV loading, returns calculation
-└── test_rhiza/          # 74 tests - Framework validation
+tests/test_monkeys/
+└── test_data.py     # 11 tests covering CSV loading and return calculations
+    ├── TestLoadPricesFromCSV (5 tests)
+    └── TestCalculateReturns (6 tests)
 ```
 
 ### Test Quality
-- Property-based testing with Hypothesis
-- Parameterized tests for comprehensive coverage
-- Fixtures for reproducible test environments
+- Proper fixtures for test data setup
+- Error case testing (FileNotFoundError, ValueError)
+- Value validation with `pytest.approx`
 - Clear test naming following `test_<behavior>` convention
 
 ---
 
-## 3. Documentation (10/10)
+## 3. Documentation (9/10)
 
 ### Documentation Assets
 | File | Purpose |
@@ -81,17 +82,13 @@ tests/
 | CONTRIBUTING.md | Contribution guidelines |
 | CODE_OF_CONDUCT.md | Community standards |
 | SECURITY.md | Vulnerability disclosure policy |
-| CHANGELOG.md | Release history and changes |
-
-### API Documentation
-- Full docstrings with Google-style formatting
-- Examples in docstrings that are tested via doctest
-- Type hints for IDE support
+| CHANGELOG.md | Release history (Keep a Changelog format) |
 
 ### Interactive Documentation
-- Marimo notebooks with embedded dependencies
-- Self-contained, reproducible examples
-- Git-friendly Python files (not JSON)
+- Marimo notebook (`book/marimo/notebooks/monkey.py`)
+- Pure Python files (git-friendly)
+- Self-contained with PEP 723 script metadata
+- Published at [tschm.github.io/monkeys/book](https://tschm.github.io/monkeys/book)
 
 ---
 
@@ -108,9 +105,9 @@ tests/
 | rhiza_validate.yml | Template validation |
 | rhiza_sync.yml | Template sync |
 | rhiza_release.yml | PyPI publishing |
-| rhiza_docker.yml | Docker validation |
-| rhiza_devcontainer.yml | Devcontainer build |
 | rhiza_deptry.yml | Dependency analysis |
+| rhiza_mypy.yml | Type checking |
+| rhiza_security.yml | Security scanning |
 
 ### Key Features
 - Dynamic Python version matrix from pyproject.toml
@@ -120,187 +117,114 @@ tests/
 
 ---
 
-## 5. Architecture (10/10)
+## 5. Architecture (9/10)
 
 ### Project Structure
 ```
 monkeys/
 ├── src/monkeys/         # Installable Python package
-│   ├── __init__.py      # Public API exports
-│   ├── portfolio.py     # Core simulation logic
-│   └── data.py          # Data utilities
 ├── scripts/             # Standalone utility scripts
 │   └── download_prices.py
-├── tests/               # Comprehensive test suite
+├── tests/               # Test suite
 ├── book/marimo/         # Interactive documentation
-└── .github/workflows/   # 11 CI/CD workflows
+│   └── notebooks/
+│       └── monkey.py    # Main simulation notebook
+└── .github/workflows/   # 12 CI/CD workflows
 ```
 
 ### Design Decisions
 - **src/ layout** for proper package isolation
 - **Hatchling build system** for modern packaging
-- **Scripts directory** for standalone utilities
-- **Separation of concerns** between package and notebooks
+- **Polars** as sole runtime dependency (fast DataFrame library)
+- **Separation of concerns** - core logic in package, visualization in notebooks
+
+### Dependencies
+- **Runtime**: polars (>=1.3)
+- **Development**: marimo, numpy, plotly, pyarrow, yfinance, loguru
 
 ---
 
-## 6. Security (10/10)
+## 6. Security (9/10)
 
 ### Security Measures
-- **Ruff Bandit (S) rules** for static security analysis
-- **Ruff Bugbear (B) rules** for bug detection
-- **CodeQL scanning** (weekly + on push)
+- **Bandit** in pre-commit hooks for security scanning
+- **CodeQL** via GitHub Actions (weekly + on push)
 - **Renovate** for automated dependency updates
 - **OIDC publishing** (no stored credentials)
 - **SECURITY.md** with vulnerability disclosure policy
 
-### Ruff Security Configuration (ruff.toml)
-```toml
-select = ["B", "D", "E", "F", "I", "N", "S", "W", "UP"]
+### Pre-commit Hooks
+```yaml
+- bandit (--skip B101 for tests)
+- check-toml, check-yaml
+- ruff (linting + formatting)
+- markdownlint
+- check-renovate, check-github-workflows
+- actionlint
+- validate-pyproject
 ```
-
-### Security Policy
-- Clear vulnerability reporting process
-- Response timeline commitments
-- Known limitations documented
 
 ---
 
-## 7. Maintainability (10/10)
+## 7. Maintainability (9/10)
 
 ### Automation
 | Feature | Implementation |
 |---------|---------------|
-| Dependency updates | Renovate (weekly) |
-| Template sync | Weekly GitHub Action |
+| Dependency updates | Renovate (automated PRs) |
+| Template sync | Rhiza framework sync workflow |
 | Version bumping | `make bump` with uv |
 | Release management | Automated via tags |
-| Pre-commit hooks | 7 hooks configured |
-| Changelog | CHANGELOG.md with Keep a Changelog format |
+| Pre-commit hooks | 8 hooks configured |
+| Code coverage | pytest-cov with 100% target |
 
 ### Build System
 - Hatchling for modern Python packaging
 - uv for fast dependency management
-- Lock file for reproducible builds
-- Self-documenting Makefile
+- Lock file (uv.lock) for reproducible builds
 
 ---
 
-## 8. Detailed Scores Breakdown
+## 8. Improvement Opportunities
 
-### Code Quality (10/10)
-| Aspect | Score |
-|--------|-------|
-| Style consistency | 10/10 |
-| Documentation quality | 10/10 |
-| Code organization | 10/10 |
-| Error handling | 10/10 |
+### High Priority
+1. **Expand domain code** - The package currently only has data loading utilities; portfolio simulation logic could be added to `src/monkeys/`
+2. **Add type checking to CI** - mypy workflow exists but may benefit from stricter configuration
 
-### Testing (10/10)
-| Aspect | Score |
-|--------|-------|
-| Test coverage | 10/10 |
-| Test quality | 10/10 |
-| Test organization | 10/10 |
-| CI integration | 10/10 |
+### Medium Priority
+3. **Property-based testing** - Consider adding Hypothesis for edge case discovery
+4. **Benchmark tracking** - `.benchmarks/` directory exists; integrate with CI
 
-### Documentation (10/10)
-| Aspect | Score |
-|--------|-------|
-| README quality | 10/10 |
-| Code documentation | 10/10 |
-| Interactive docs | 10/10 |
-| Contributor guidance | 10/10 |
-
-### CI/CD (10/10)
-| Aspect | Score |
-|--------|-------|
-| Pipeline coverage | 10/10 |
-| Automation level | 10/10 |
-| Security integration | 10/10 |
-| Deployment process | 10/10 |
-
-### Architecture (10/10)
-| Aspect | Score |
-|--------|-------|
-| Structure clarity | 10/10 |
-| Separation of concerns | 10/10 |
-| Extensibility | 10/10 |
-| Tool choices | 10/10 |
-
-### Security (10/10)
-| Aspect | Score |
-|--------|-------|
-| Static analysis | 10/10 |
-| Dependency management | 10/10 |
-| CI security | 10/10 |
-| Code practices | 10/10 |
-
-### Maintainability (10/10)
-| Aspect | Score |
-|--------|-------|
-| Automation | 10/10 |
-| Update process | 10/10 |
-| Extension points | 10/10 |
-| Build system | 10/10 |
+### Low Priority
+5. **API documentation** - Generate API docs with pdoc for the public functions
 
 ---
 
-## 9. Improvements Made
+## 9. Project Context
 
-### From Previous Analysis (8/10 → 10/10)
+This is a financial simulation project that demonstrates how random portfolio allocation ("monkeys") can compete with professional fund managers. The codebase is:
 
-1. **Security Linting** ✅
-   - Added Bandit (S) and Bugbear (B) rules to Ruff
-   - Configured per-file exceptions for legitimate use cases
+- **Educational/research focused** - Not for production trading
+- **Template-based** - Uses Rhiza framework for consistency
+- **Notebook-driven** - Primary interaction through Marimo
 
-2. **Domain Code in src/** ✅
-   - Created `src/monkeys/` package with proper structure
-   - `MonkeyPortfolio` dataclass for portfolio representation
-   - `simulate_random_weights()` for random allocation
-   - `generate_weight_history()` for multi-period simulation
-   - `calculate_portfolio_return()` for return calculation
-   - Data utilities: `load_prices_from_csv()`, `calculate_returns()`
-
-3. **Comprehensive Domain Tests** ✅
-   - 46 tests for portfolio and data modules
-   - 100% code coverage on src/monkeys/
-   - Property-based and parameterized testing
-
-4. **SECURITY.md** ✅
-   - Vulnerability disclosure policy
-   - Response timeline commitments
-   - Security measures documentation
-
-5. **CHANGELOG.md** ✅
-   - Keep a Changelog format
-   - Version history tracking
-   - Unreleased changes section
-
-6. **Scripts Organization** ✅
-   - Moved `download_prices.py` to `scripts/` directory
-   - Clean root directory structure
-
-7. **Build System** ✅
-   - Added Hatchling build configuration
-   - Proper src/ layout support
-   - Editable installs working
+The minimal `src/monkeys/` package provides data utilities, while the Marimo notebook (`monkey.py`) contains the interactive simulation logic with embedded dependencies.
 
 ---
 
 ## 10. Conclusion
 
-The **monkeys** repository is now a **production-ready** Python project that demonstrates best practices across all dimensions:
+The **monkeys** repository is a well-maintained Python project that demonstrates modern development practices:
 
-- **Code Quality**: Clean, well-documented code with security linting
-- **Testing**: Comprehensive test suite with 100% coverage on domain code
-- **Documentation**: Full documentation including SECURITY.md and CHANGELOG.md
-- **CI/CD**: 11 automated workflows covering testing, security, and deployment
-- **Architecture**: Proper src/ layout with installable package
-- **Security**: Static analysis, vulnerability policy, and secure CI/CD
-- **Maintainability**: Automated updates, template sync, and reproducible builds
+- **Clean, minimal codebase** with 100% test coverage
+- **Comprehensive CI/CD** with 12 automated workflows
+- **Interactive documentation** via Marimo notebooks
+- **Strong security posture** with Bandit and CodeQL
+- **Template-driven** structure via Rhiza framework
 
-**Overall Score: 10/10** - An exemplary Python project showcasing modern development practices. Ready for production use and serves as an excellent template for new projects.
+The project successfully balances simplicity with thoroughness. The small domain code surface is intentional - complex simulation logic lives in the notebook for interactivity, while the package provides reusable data utilities.
+
+**Overall Score: 9/10** - A solid foundation for financial simulation experimentation with room to expand the core library as needs grow.
 
 ---
 
