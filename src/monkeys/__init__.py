@@ -8,7 +8,6 @@ probability distributions and rebalancing with random weights.
 """
 
 from monkeys.data import (
-    DEFAULT_TICKERS,
     calculate_returns,
     get_valid_tickers,
     load_prices_from_csv,
@@ -21,7 +20,6 @@ from monkeys.portfolio import (
 )
 
 __all__ = [
-    "DEFAULT_TICKERS",
     "MonkeyPortfolio",
     "calculate_portfolio_return",
     "calculate_returns",

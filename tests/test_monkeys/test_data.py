@@ -10,34 +10,10 @@ import polars as pl
 import pytest
 
 from monkeys import (
-    DEFAULT_TICKERS,
     calculate_returns,
     get_valid_tickers,
     load_prices_from_csv,
 )
-
-
-class TestDefaultTickers:
-    """Tests for the DEFAULT_TICKERS constant."""
-
-    def test_default_tickers_not_empty(self):
-        """Test that default tickers list is not empty."""
-        assert len(DEFAULT_TICKERS) > 0
-
-    def test_default_tickers_are_strings(self):
-        """Test that all default tickers are strings."""
-        for ticker in DEFAULT_TICKERS:
-            assert isinstance(ticker, str)
-
-    def test_default_tickers_no_duplicates(self):
-        """Test that default tickers have no duplicates."""
-        assert len(DEFAULT_TICKERS) == len(set(DEFAULT_TICKERS))
-
-    def test_known_tickers_present(self):
-        """Test that some well-known tickers are in the default list."""
-        known_tickers = ["AAPL", "GOOG", "AMZN"]
-        for ticker in known_tickers:
-            assert ticker in DEFAULT_TICKERS
 
 
 class TestLoadPricesFromCSV:
