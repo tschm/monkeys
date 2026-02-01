@@ -58,49 +58,6 @@ Explore your options with pre-defined targets
 make
 ```
 
-### Marimo Dependency Management
-
-Marimo notebooks in this project use Marimo's built-in dependency management system,
-which automatically installs required packages on the fly within isolated sandboxes.
-This approach has several benefits:
-
-- No need to install all dependencies globally
-- Each notebook manages its own dependencies independently
-- Sandboxed environments prevent package conflicts
-- Easy to add or update dependencies without affecting other notebooks
-
-#### How It Works
-
-Each Marimo notebook (.py file) includes a special comment block at the top that
-specifies its dependencies:
-
-```python
-# /// script
-# requires-python = ">=3.12"
-# dependencies = [
-#     "marimo==0.13.15",
-#     "pandas==2.3.0",
-#     "numpy==2.3.0",
-#     "plotly==6.1.2"
-# ]
-# ///
-```
-
-```result
-```
-
-When you run a notebook with the `--sandbox` flag (which the Makefile includes),
-Marimo automatically:
-
-1. Creates an isolated virtual environment for the notebook
-2. Installs all specified dependencies in that environment
-3. Runs the notebook using the sandboxed environment
-
-#### Creating New Notebooks
-
-When creating new notebooks, simply include a similar dependency block at the top
-of your file with the packages you need.
-
 ## Usage
 
 ```bash
