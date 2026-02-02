@@ -12,7 +12,7 @@
 | Category | Score | Notes |
 |----------|-------|-------|
 | **Code Quality** | 10/10 | Clean structure, Google-style docstrings, type hints, security linting |
-| **Testing** | 10/10 | 76 tests, 100% coverage, property-based testing with Hypothesis |
+| **Testing** | 10/10 | 43 tests, 100% coverage, property-based testing with Hypothesis |
 | **Documentation** | 10/10 | Full docs, CHANGELOG, SECURITY.md, doctests, interactive notebooks |
 | **CI/CD** | 10/10 | 12 workflows covering testing, security, deployment |
 | **Architecture** | 10/10 | Clean src/ layout, proper packaging, comprehensive public API |
@@ -41,16 +41,13 @@ src/monkeys/
 ```
 
 ### Public API
-- `MonkeyPortfolio` - Dataclass for portfolio representation
-- `simulate_random_weights()` - Generate random portfolio weights
 - `generate_weight_history()` - Multi-period weight simulation
-- `calculate_portfolio_return()` - Compute weighted returns
 - `simulate_portfolio_returns()` - Full portfolio simulation
 - `load_prices_from_csv()` - Load price data from CSV
 - `calculate_returns()` - Calculate simple or log returns
 
 ### Code Metrics
-- 7 public functions/classes
+- 4 public functions
 - Comprehensive docstrings with runnable examples
 - Clear error messages with descriptive exceptions
 
@@ -59,7 +56,7 @@ src/monkeys/
 ## 2. Testing (10/10)
 
 ### Test Coverage
-- **76 tests** across 4 test files
+- **43 tests** across 4 test files
 - **100% coverage** on domain code
 - Tests organized into logical classes
 
@@ -68,8 +65,8 @@ src/monkeys/
 tests/test_monkeys/
 ├── conftest.py          # Shared fixtures
 ├── test_data.py         # 11 tests - CSV loading, returns
-├── test_portfolio.py    # 54 tests - Portfolio simulation
-└── test_benchmark.py    # 11 tests - Performance benchmarks
+├── test_portfolio.py    # 26 tests - Portfolio simulation
+└── test_benchmark.py    # 6 tests - Performance benchmarks
 ```
 
 ### Test Quality
@@ -215,14 +212,12 @@ monkeys/
 
 ### Phase 1: Domain Code (Architecture +1, Code Quality +1)
 - Created `src/monkeys/portfolio.py` with core simulation logic
-- `MonkeyPortfolio` dataclass with validation
-- `simulate_random_weights()` for random allocation
 - `generate_weight_history()` for multi-period simulation
-- `calculate_portfolio_return()` for return calculation
 - `simulate_portfolio_returns()` for full simulation
+- Refactored notebook to use package functions instead of local implementations
 
 ### Phase 2: Testing (Testing +2)
-- Expanded from 11 to 76 tests
+- Expanded from 11 to 43 tests
 - Added property-based testing with Hypothesis
 - Added parameterized tests for key functions
 - Added benchmark tests with pytest-benchmark
@@ -241,6 +236,7 @@ monkeys/
 - Added benchmark tests for performance tracking
 - Configured strict mypy settings
 - Added hypothesis and pytest-benchmark dependencies
+- Fixed mypy no-any-return errors with explicit type annotations
 
 ---
 
@@ -249,10 +245,10 @@ monkeys/
 The **monkeys** repository is now a **production-ready** Python project that demonstrates best practices across all dimensions:
 
 - **Code Quality**: Clean, well-documented code with security linting
-- **Testing**: Comprehensive test suite with 76 tests, property-based testing, and benchmarks
+- **Testing**: Comprehensive test suite with 43 tests, property-based testing, and benchmarks
 - **Documentation**: Full documentation with runnable examples and interactive notebooks
 - **CI/CD**: 12 automated workflows covering testing, security, and deployment
-- **Architecture**: Proper src/ layout with comprehensive public API
+- **Architecture**: Proper src/ layout with focused public API
 - **Security**: Static analysis with Bandit, vulnerability policy, and secure CI/CD
 - **Maintainability**: Automated updates, strict typing, benchmark tracking
 
