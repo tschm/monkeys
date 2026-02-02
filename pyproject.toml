@@ -82,4 +82,7 @@ polars = "polars"
 pyarrow = "pyarrow"
 yfinance = "yfinance"
 loguru = "loguru"
+hypothesis = "hypothesis"
+pandas = "pandas"
+pytest-benchmark = "pytest_benchmark"
 
