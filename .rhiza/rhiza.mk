@@ -53,6 +53,10 @@ export RHIZA_VERSION
 export UV_NO_MODIFY_PATH := 1
 export UV_VENV_CLEAR := 1
 
+# Unset VIRTUAL_ENV to prevent uv from warning about path mismatches
+# when a virtual environment is already activated in the shell
+unexport VIRTUAL_ENV
+
 # Load .rhiza/.env (if present) and export its variables so recipes see them.
 -include .rhiza/.env
 
@@ -134,7 +138,7 @@ help: print-logo ## Display this help message
 	+@printf "\n"
 
 version-matrix: install-uv ## Emit the list of supported Python versions from pyproject.toml
-	@${UV_BIN} run .rhiza/utils/version_matrix.py
+	@${UVX_BIN} "rhiza-tools>=0.2.2" version-matrix
 
 print-% : ## print the value of a variable (usage: make print-VARIABLE)
 	@printf "${BLUE}[INFO] Printing value of variable '$*':${RESET}\n"
