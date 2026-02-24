@@ -4,6 +4,7 @@ Security Notes:
 - S101 (assert usage): Asserts are appropriate in test code for validating conditions
 - S603/S607 (subprocess usage): Any subprocess calls use controlled inputs in test environments
 """
+
 import numpy as np
 import pytest
 
