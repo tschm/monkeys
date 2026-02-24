@@ -2,77 +2,99 @@
 
 ## Supported Versions
 
-We release patches for security vulnerabilities in the following versions:
+We actively support the following versions with security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.x.x   | :white_check_mark: |
+| 0.8.x   | :white_check_mark: |
+| 0.7.x   | :white_check_mark: |
+| < 0.7   | :x:                |
 
 ## Reporting a Vulnerability
 
-We take security vulnerabilities seriously. If you discover a security issue,
-please report it responsibly.
+We take security vulnerabilities seriously. If you discover a security issue, please report it responsibly.
 
 ### How to Report
 
-1. **Do NOT open a public GitHub issue** for security vulnerabilities.
+**Do NOT report security vulnerabilities through public GitHub issues.**
 
-2. **Email the maintainer directly** or use GitHub's private vulnerability
-   reporting feature:
-   - Go to the repository's Security tab
-   - Click "Report a vulnerability"
-   - Provide detailed information about the vulnerability
+Instead, please report them via one of the following methods:
+
+1. **GitHub Security Advisories** (Preferred)
+   - Go to the [Security Advisories](https://github.com/jebel-quant/rhiza/security/advisories) page
+   - Click "New draft security advisory"
+   - Fill in the details and submit
+
+2. **Email**
+   - Send details to the repository maintainers
+   - Include "SECURITY" in the subject line
 
 ### What to Include
 
-When reporting a vulnerability, please include:
+Please include the following information in your report:
 
-- A description of the vulnerability
-- Steps to reproduce the issue
-- Potential impact assessment
-- Any suggested fixes (optional)
-
-### Response Timeline
-
-- **Initial Response**: Within 48 hours
-- **Status Update**: Within 7 days
-- **Resolution Target**: Within 30 days for critical issues
+- **Description**: A clear description of the vulnerability
+- **Impact**: The potential impact of the vulnerability
+- **Steps to Reproduce**: Detailed steps to reproduce the issue
+- **Affected Versions**: Which versions are affected
+- **Suggested Fix**: If you have one (optional)
 
 ### What to Expect
 
-1. We will acknowledge receipt of your report
-2. We will investigate and validate the vulnerability
-3. We will work on a fix and coordinate disclosure timing
-4. We will credit you in the security advisory (unless you prefer anonymity)
+- **Acknowledgment**: We will acknowledge receipt within 48 hours
+- **Initial Assessment**: We will provide an initial assessment within 7 days
+- **Resolution Timeline**: We aim to resolve critical issues within 30 days
+- **Credit**: We will credit reporters in the security advisory (unless you prefer to remain anonymous)
+
+### Scope
+
+This security policy applies to:
+
+- The Rhiza template system and configuration files
+- GitHub Actions workflows provided by this repository
+- Shell scripts in `.rhiza/scripts/`
+- Python utilities in `.rhiza/utils/`
+
+### Out of Scope
+
+The following are generally out of scope:
+
+- Vulnerabilities in upstream dependencies (report these to the respective projects)
+- Issues that require physical access to a user's machine
+- Social engineering attacks
+- Denial of service attacks that require significant resources
 
 ## Security Measures
 
-This project implements the following security practices:
+This project implements several security measures:
 
-### Static Analysis
+### Code Scanning
+- **CodeQL**: Automated code scanning for Python and GitHub Actions
+- **Bandit**: Python security linter integrated in CI and pre-commit
+- **pip-audit**: Dependency vulnerability scanning
+- **Secret Scanning**: GitHub secret scanning enabled on this repository
 
-- **Ruff with Bandit rules (S)**: Automated security vulnerability detection
-- **CodeQL scanning**: Weekly security analysis via GitHub Actions
-- **Pre-commit hooks**: Validate code before commits
+### Supply Chain Security
+- **SLSA Provenance**: Build attestations for release artifacts (public repositories only)
+- **Locked Dependencies**: `uv.lock` ensures reproducible builds
+- **Dependabot**: Automated dependency updates with security patches (version and security updates)
+- **Renovate**: Additional automated dependency update management
 
-### Dependency Management
+### Release Security
+- **OIDC Publishing**: PyPI trusted publishing without stored credentials
+- **Signed Commits**: GPG signing supported for releases
+- **Tag Protection**: Releases require version tag validation
 
-- **Renovate**: Automated dependency updates
-- **Dependabot alerts**: GitHub security alerts for vulnerable dependencies
-- **Lock files**: Reproducible builds with `uv.lock`
+## Security Best Practices for Users
 
-### Code Review
+When using Rhiza templates in your projects:
 
-- All changes require pull request review
-- CI/CD must pass before merging
-- Security-sensitive changes receive additional scrutiny
+1. **Keep Updated**: Regularly sync with upstream templates
+2. **Review Changes**: Review template sync PRs before merging
+3. **Enable Security Features**: Enable CodeQL, secret scanning, and Dependabot in your repositories
+4. **Use Locked Dependencies**: Always commit `uv.lock` for reproducible builds
+5. **Configure Branch Protection**: Require PR reviews and status checks
 
-## Known Limitations
+## Acknowledgments
 
-This is a simulation/demonstration project and should not be used for:
-
-- Actual financial trading decisions
-- Production financial systems
-- Handling sensitive financial data
-
-The random portfolio simulations are for educational and research purposes only.
+We thank the security researchers and community members who help keep Rhiza secure.
