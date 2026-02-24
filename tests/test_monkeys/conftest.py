@@ -1,4 +1,8 @@
-"""Shared fixtures for monkeys tests."""
+"""Shared fixtures for monkeys tests.
+
+Security note: Test code uses assert statements (S101) which are safe here
+as they are only executed by pytest, never in production.
+"""
 
 import numpy as np
 import pytest
